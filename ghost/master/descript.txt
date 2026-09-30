@@ -1,0 +1,14 @@
+charset,UTF-8
+
+craftman,Yagi Kushigahama
+craftmanw,櫛ヶ浜やぎ
+craftmanurl,http://www.geocities.co.jp/SiliconValley-Cupertino/8536/
+
+name,ポストと狛犬
+type,ghost
+
+sakura.name,ポスト
+kero.name,狛犬
+
+icon,post.ico
+shiori,satori.dll

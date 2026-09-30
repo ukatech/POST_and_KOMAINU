@@ -1,0 +1,16 @@
+# Development kit files that must not be shipped in the nar or network updates (gitignore syntax).
+# Part of the kit: tools/update-devkit.ps1 replaces this file.
+# .narignore reads it with "include:tools/devkit.narignore"; write the ghost's own rules there.
+
+# local tools, settings and build output
+/build/
+/tools/bin/
+/tools/*.exe
+/tools/local.json
+/.claude/settings.local.json
+
+# balloon images of tools/sstp.ps1 -Balloon, left only when the script was stopped midway
+/ghost/master/devkit-balloon-*/
+
+# new versions left by tools/update-devkit.ps1, waiting to be merged
+*.devkit-new

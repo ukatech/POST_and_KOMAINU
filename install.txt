@@ -1,0 +1,7 @@
+charset,UTF-8
+type,ghost
+name,ポストと狛犬
+directory,POST_and_KOMAINU
+
+refresh,1
+refreshundeletemask,satori_savedata.txt
