@@ -18,7 +18,7 @@
 - **`satori.dll`、`satorite.exe`**: 里々の配布物（https://github.com/ukatech/satoriya-shiori ）。`ghost/master/satori_license.txt` の条件。再配布・改変・ゴーストへの同梱は自由だが、**ライセンス文書を同梱すること**、改変しても**ライセンスを変えてはならない**こと、無保証であること。辞書・設定ファイル・SAORI・画像・`install.txt` などは、このライセンスの対象外。
 - **辞書とサンプルスクリプト**（`dic*.txt`、`another/`、`satori_conf.txt`、`replace*.txt`）: 原作者（櫛ヶ浜やぎ）が著作権を放棄している（`readme.txt`）。自由に改変・再配布してよい。
 - **シェルの画像**（`shell/master/`）: 辞書と同じく著作権放棄で、自由に改変・再配布してよい（リポジトリの所有者に確認済み）。原作者は櫛ヶ浜やぎ。
-- **`れしば.exe`**: 櫛ヶ浜やぎのログ受信ツール。`れしば.txt` に使い方はあるが、ライセンスの記載はない。
+- **`receiver.bat` `receiver.ps1` `receiver.txt`**: ログ受信ウインドウ（旧版の `れしば.exe` の代わり）。開発キットと同じく Public Domain（Unlicense）。
 
 ## 辞書の構成
 
@@ -30,7 +30,7 @@
 - `replace_after.txt`: 応答スクリプトを返す直前の置換。`さんさん`→`さん`、`ちゃんさん`→`ちゃん`、`くんさん`→`くん`（`＄ユーザ名` が敬称で終わっているときに「さん」が重ならないように）、`…` `‥` `・` の直後に `\w3` を足す。**`…` の後ろに `\w3` を手で書かない**（`……` と書けば、置換で自動的に間が入る）。
 - `characters.ini` と `satori_bootconf.txt` は無い。辞書は BOM なしの UTF-8 で、里々が全体を見て UTF-8 と判定している。UTF-8 と明示したいときは、`satori_bootconf.txt` に `is_utf8_all,true` と書く。
 - セーブデータは `satori_savedata.txt`（里々が自動で読み書きする。手で編集しない）。変数は、`＄` で代入したものがすべて保存される。
-- そのほか `ghost/master/` にあるもの: `post.ico`（`icon`）、`satorite.exe` `satorite.txt` `れしば.exe` `れしば.txt`（里々の補助ツール）。
+- そのほか `ghost/master/` にあるもの: `post.ico`（`icon`）、`satorite.exe` `satorite.txt`（里々の補助ツール）、`receiver.bat` `receiver.ps1` `receiver.txt`（SSP で動いている里々のログを表示するウインドウを開く。`receiver.bat` → `receiver.ps1` → 開発キットの `tools/lib/tamacsw.cs` からビルドした `tamacsw.exe`。キットが無いと動かないので、キットなしの nar には入れない（`auto_release.yml`））。
 - `shell/master/` が本体のシェル。`shell/` のほかのフォルダは、下の「シェル」を参照。
 
 ## イベントと辞書ファイルの対応
@@ -183,6 +183,6 @@
 - [ ] 辞書の 1 行目のコメント（`dic1_Base.txt` など、ファイル名が古い）
 - [ ] 実験用の辞書を、使わないなら消す: `dic08_Labo.txt`（消すなら `dic03_Menu.txt` のメニューの「らぼ」も）、`another/`、`dic09_ExEvent.txt`（古い外部アプリ用）。`dic02_Event.txt` の `＊rが押された` は、辞書を書くときに便利なので残してもよい
 - [ ] 同梱の `readme.txt` と `install.txt` を、自分のゴースト向けに書き直す（`readme.txt` は原作者の連絡先と配布元 URL のまま）
-- [ ] `satori_license.txt` は、`satori.dll` を同梱する限り、残す。`satorite.exe` `れしば.exe`（と説明文書）は、使わないなら消す
+- [ ] `satori_license.txt` は、`satori.dll` を同梱する限り、残す。`satorite.exe`、`receiver.*`（と説明文書）は、使わないなら消す
 - [ ] クレジットの例:「ポストと狛犬（櫛ヶ浜やぎ、https://github.com/ukatech/POST_and_KOMAINU ）をもとに作成」（URL は実際のものに直す）
 - [ ] この `GHOST.md` を新しいゴーストの内容に書き直し、この節は済んだら消す

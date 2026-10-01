@@ -36,6 +36,7 @@ https://github.com/ukatech/POST_and_KOMAINU
   powershell -NoProfile -ExecutionPolicy Bypass -File tools/check-dic.ps1 -Run
   ```
 
+- SSP で動かしている間の里々のログ（（ ）が何に展開されたか、どのリクエストに何を返したか）は、`ghost/master/receiver.bat` で開くウインドウで見られます。ゴーストより先に開いておきます（使い方は `ghost/master/receiver.txt`。開発キットが入っているフォルダでだけ動きます）。
 - シェル（`shell/master/`）は、辞書と同じく櫛ヶ浜やぎ氏が著作権を放棄したものです。自由に改変・再配布できます。
 - 自分のゴーストとして配布するときに変えるところ（名前、作者、インストール先、ネットワーク更新の URL など）は、[docs/agents/standalone.md](docs/agents/standalone.md) と、`GHOST.md` の「テンプレートから独立させるときの追加項目」にチェックリストがあります。
 
@@ -63,4 +64,4 @@ https://github.com/ukatech/POST_and_KOMAINU
 - `ghost/master/satori.dll`、`satorite.exe`: 里々の配布物です。`ghost/master/satori_license.txt` の条件（再配布・改変は自由、ただしライセンス文書を同梱すること、ライセンスを変えないこと、無保証）に従います。辞書、設定ファイル、SAORI、画像などは、このライセンスの対象外です。
 - 開発キット（`tools/`、`docs/agents/`、`.claude/` など）: YAYA のテンプレートゴースト「紺野ややめ」（Public Domain / Unlicense）の開発キットを、里々向けに移植したものです。キットも同じく Public Domain（Unlicense）です。
 
-詳しいライセンスの整理（`れしば.exe` など）は、[GHOST.md](GHOST.md) の「ライセンス」にあります。
+詳しいライセンスの整理は、[GHOST.md](GHOST.md) の「ライセンス」にあります。

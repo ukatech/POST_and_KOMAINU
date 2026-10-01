@@ -13,7 +13,8 @@
 | `ghost/master/replace.txt` / `replace_after.txt` | 辞書の読み込み時の置換 / 応答を返す直前の置換（`置換前<タブ>置換後`） |
 | `ghost/master/satori.dll` | SHIORI 本体（Unicode 版で、ssu を内蔵している）。`tools/update-satori.ps1` 以外で差し替えない。旧版のゴーストには `saori/ssu.dll` が残っていることもある（`docs/agents/workflows/update-satori.md`） |
 | `ghost/master/satori_license.txt` | `satori.dll` のライセンス。`satori.dll` を同梱する限り残す |
-| `ghost/master/satorite.exe` `れしば.exe` ほか | 里々の補助ツール（さとりて、ログ受信ツール）と説明文書。**編集しない**。`satorite.exe` の更新は `tools/update-satori.ps1` で行う |
+| `ghost/master/satorite.exe` ほか | 里々の補助ツール（さとりて）と説明文書。**編集しない**。`satorite.exe` の更新は `tools/update-satori.ps1` で行う |
+| `ghost/master/receiver.bat` / `receiver.ps1`（あるとき） | SSP で動いている里々のログを表示するウインドウ（`tools/lib/tamacsw.cs` からビルドする `tamacsw.exe`）を開く。キットのあるフォルダでだけ動く |
 | `ghost/master/saori/` | SAORI の DLL（`＠SAORI` で登録する）。ssu は内蔵なので要らない |
 | `shell/master/surfaces.txt` | サーフェス（表情、アニメーション、当たり判定）の定義 |
 | `shell/master/descript.txt` | シェルの情報、メニューや吹き出し位置の設定 |
@@ -26,6 +27,6 @@
 | `CLAUDE.md`, `.claude/`, `.mcp.json` | Claude Code 用の設定（編集後の自動チェックと起動時の診断、調査用サブエージェント、仕様検索 MCP） |
 | `.github/workflows/auto_check.yml` | push ごとに辞書チェック（tamacs）する |
 
-実行時に作られるもの（編集もコミットもしない）: `ghost/master/satori_savedata.txt` と `satori_savebackup.txt`（変数の保存先。ゴーストの終了時に里々が書く。暗号化を有効にしたときは `.sat`）、`ghost/master/profile/`、`shell/master/profile/`、`tools/bin/`（ビルドした tamacs.exe と、ダウンロードしたツール）、`tools/local.json`（各自の設定）、`build/`。
+実行時に作られるもの（編集もコミットもしない）: `ghost/master/satori_savedata.txt` と `satori_savebackup.txt`（変数の保存先。ゴーストの終了時に里々が書く。暗号化を有効にしたときは `.sat`）、`ghost/master/profile/`、`shell/master/profile/`、`tools/bin/`（ビルドした tamacs.exe、tamacsw.exe と、ダウンロードしたツール）、`tools/local.json`（各自の設定）、`build/`。
 
 `tools/check-dic.ps1` と `tools/shiori.ps1` は、`ghost/master` の一時コピーで里々を動かすので、実行してもこのフォルダに `satori_savedata.txt` などは残らない。

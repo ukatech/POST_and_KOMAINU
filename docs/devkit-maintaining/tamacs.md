@@ -1,4 +1,4 @@
-# tamacs と一時コピー
+# tamacs と一時コピー、tamacsw
 
 tamacs は、SHIORI の dll を SSP なしで読み込むツール。伺かのログ受信ツール tama のコンソール版 tamac（[YAYA-shiori/tama](https://github.com/YAYA-shiori/tama)）を C# に移したもので、ソース `tools/lib/tamacs.cs` は YAYA 版のキット（konnoyayame）と同じファイル。`tools/check-dic.ps1` と `tools/shiori.ps1` はこれで里々を動かしている。
 
@@ -20,6 +20,14 @@ tamacs は、SHIORI の dll を SSP なしで読み込むツール。伺かの�
 - 環境変数 `GITHUB_ACTIONS` があると `--ci` の出力に切り替わる（`::error file=,line=0,…` になり、位置が入らない）。`Invoke-DevkitTamacs` は子プロセスに `GITHUB_ACTIONS` を渡さず、注釈は `check-dic.ps1 -Ci` が自分で作る。
 - tamac は毎回 `[tamac] Interface "CI_check_failed" not found` を出していたが、tamacs は `--ci` のときだけ出す。`[tamacs]` で始まる行は、`Get-DevkitSatoriDiagnostics` がエラーとして扱う。
 - tamac 1.0.3.25 は、4096 バイトを超えるリクエストで、標準入力の読み取りの区切りにかかった日本語の文字を壊した（1.0.3.26 で直った）。tamacs は標準入力をすべて読んでから変換するので起こらない。`tools/check-dic.ps1 -Run` は、1 回の実行を短く保つため、今も 3800 バイト以内に分けて実行している。
+
+## tamacsw.exe（ログ受信ウインドウ）
+
+- SSP で動いている里々のログを表示する GUI。旧版の「れしば」の代わりで、ゴーストの `ghost/master/receiver.bat` → `receiver.ps1` から起動する（`receiver.*` はキットではなくゴーストのファイル）。ソースは `tools/lib/tamacsw.cs`、ビルドは `tools/lib/common.ps1` の `Get-DevkitTamacsw`（`/target:winexe`、dll を読まないので `/platform:anycpu`。tamacs と同じく `Get-DevkitCsTool` で `tools/bin/tamacsw-<hash>.exe` にする）。
+- 里々（`satoriya/_/Sender.cpp`）は、読み込まれたあと最初にログを送るときに一度だけ、`FindWindow("れしば", "れしば")`、なければ `FindWindow("TamaWndClass", NULL)` で受信ウインドウを探す。見つからなければ、そのロードの間は探し直さない（`＄れしば送信＝有効` で探し直す）。だから、ゴーストより先に開いてもらう。
+- `TamaWndClass` には、`dwData` にログ種別（tamacs の `E_*` と同じ値）、`lpData` に UTF-16 の 1 行（末尾に LF。`E_END` 以上は制御用で空）を `WM_COPYDATA` で送る。最初に `E_UTF8` を送る。送り側は `SendMessageTimeout`（5 秒）で待つので、tamacsw はウインドウプロシージャでは行をためるだけにして、100 ミリ秒ごとのタイマーで表示する。`E_END`（アンロード）は区切りの行として表示する。
+- `FindWindow` はメッセージ専用ウィンドウを見つけないので、`TamaWndClass` は表示しない普通のトップレベルウィンドウとして作る（`RegisterClassExW` と `CreateWindowExW`）。同じクラスのウィンドウ（tama か別の tamacsw）がすでにあれば、起動しない。
+- 表示は `RichTextBox`。**古いログを常に切り詰める**（100 万文字を超えたら、古い行から 75 万文字くらいまで消す。`MaxLength` も最大にしておく）。れしばは、エディットボックスの長さの限界に当たって更新が止まることがよくあった。一時停止中にためる行も 2 万件まで。
 
 ## 里々のログの出方（`Sender`）
 

@@ -57,6 +57,10 @@ jobs:
           /.claude/
           /.github/
           /tools/
+          # the log receiver needs tools/
+          /ghost/master/receiver.bat
+          /ghost/master/receiver.ps1
+          /ghost/master/receiver.txt
           EOF
 
       - name: build nar

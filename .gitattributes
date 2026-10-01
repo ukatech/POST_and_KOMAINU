@@ -1,4 +1,6 @@
 * text=auto eol=lf
+# cmd.exe reads batch files with CRLF
+*.bat text eol=crlf
 
 *.dll binary
 *.exe binary
