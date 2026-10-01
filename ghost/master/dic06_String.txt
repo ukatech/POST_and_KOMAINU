@@ -1,11 +1,11 @@
 
 shiori互換dll『里々（さとり）』用辞書
-　
-　
+
+
 　メニューのボタン名とか。
 　ネットワーク更新の際のデータ置き場とか。
 　おすすめ／ポータルなURLの一覧とか。
-　
+
 
 
 ＠portalrootbutton.caption
@@ -34,8 +34,11 @@ shiori互換dll『里々（さとり）』用辞書
 ＠vanishbutton.visible
 1
 
-＠homeurl
-http://www.asahi-net.or.jp/~vy3t-andu/post/
+＃　ネットワーク更新は、いまは使っていない。使うときは、下の 2 行の頭の＃を外す。
+＃　ゴーストのルート（install.txt があるところ）に、tools/build-nar.ps1 で作った
+＃　updates2.dau と updates.txt を置いておく。
+＃＠homeurl
+＃https://raw.githubusercontent.com/ukatech/POST_and_KOMAINU/main/
 
 ＠どら映画
 の恐竜
@@ -63,130 +66,37 @@ http://www.asahi-net.or.jp/~vy3t-andu/post/
 　３行目がバナーURL（省略可）
 　４行目以降はジャンプ時に表示される会話文（省略可）
 
+　おすすめサイトは、昔のものはほとんど無くなったので、置いていない。
+　（sakura.recommendsites と kero.recommendsites を書かなければ、
+　　おすすめのボタンは出ない。）
 
-＊sakura.portalsites
-Wiki
-http://da.pekori.to/wiki/
-
-＊sakura.portalsites
--
-
-＊sakura.portalsites
-里々（さとり）
-http://www.geocities.co.jp/SiliconValley-Cupertino/8536/
-http://www.geocities.co.jp/SiliconValley-Cupertino/8536/banner.png
-：私たちのおうち。
-：管理人は櫛ヶ浜やぎ（（やぎプロフィール））。
-
-＠やぎプロフィール
-１１才／小学生
-１９才／主婦
-２５才／家事手伝い
-犬
-
-＊sakura.portalsites
-掲示板
-http://64.127.68.17/tree/cbbs.cgi?id=kusigahama
-
-＊sakura.portalsites
-里々を使い倒すかも
-http://www6.big.or.jp/~onozaki/cgi-bin/yogo.cgi
-
-＊sakura.portalsites
-里々変数辞典
-http://hirano.egota.org/he-noki/ukagaka/satori.html
-
-
-＊sakura.portalsites
--
-
-＊sakura.portalsites
-もどき開発板
-http://nh.pv.to/dev/
-
-＊sakura.portalsites
-Disc-2
-http://disc_2.tripod.co.jp/
-
-＊sakura.portalsites
-ゴースト製作リンク集
-http://nh.pv.to/test/read.cgi/dev/1034693815/
-
-
-＊sakura.portalsites
--
-
-＊sakura.portalsites
-『伺か』開発系アンテナ
-http://a.hatena.ne.jp/dzi/
-
-＊sakura.portalsites
-今週の伺か情報収集部
-http://a.hatena.ne.jp/weekly-ukagaka/
-
-＊sakura.portalsites
--
-
-＊sakura.portalsites
-さくらナビ
-http://www.remus.dti.ne.jp/~j-o/skin/skin.htm
-http://www.remus.dti.ne.jp/~j-o/skin/banner00.png
-
-＊sakura.portalsites
-伺か同盟
-http://ukagaka.s28.xrea.com:8080/
-
-＊sakura.portalsites
--
 
 ＊sakura.portalsites
 SSP
-http://ssp.shillest.net/
+https://ssp.shillest.net/
+：伺かの本体です。
 
 ＊sakura.portalsites
-CROW
-http://crow.aqrs.jp/
+UKADOC（SSP 公式仕様書）
+https://ssp.shillest.net/ukadoc/manual/
+：さくらスクリプトや SHIORI イベントの仕様書ですよ。
 
 ＊sakura.portalsites
-materia
-http://usada.sakura.vg/
+-
 
+＊sakura.portalsites
+里々の仕様書（satori-docs）
+https://ukatech.github.io/satori-docs/
+：里々の文法や関数は、ここに載ってます。
 
+＊sakura.portalsites
+里々（satoriya-shiori）
+https://github.com/ukatech/satoriya-shiori
+：里々のソースとリリースです。
 
-＊sakura.recommendsites
-梅四
-http://www2.odn.ne.jp/ume4/
-
-＊sakura.recommendsites
-古い男の部屋
-http://homepage2.nifty.com/furuiotoko/
-
-＊sakura.recommendsites
-Human Product Studio
-http://www5.big.or.jp/~sword/hps/
-
-＊sakura.recommendsites
-ろじっくぱらだいす
-http://www.juno.dti.ne.jp/~logicp/
-
-＊sakura.recommendsites
-Mizinco foundry
-http://www.wiztext.net/~mizinco/
-
-
-
-
-＊kero.recommendsites
-お色気アタック
-http://cp2.hp.infoseek.co.jp/cgi-bin/
-
-＊kero.recommendsites
-手のひらの幼なじみたちφ…
-http://osananajimi.net/pda_games.html
-
-＃　φは直後の文字の「特殊性」を無効化します。
-＃　ここでは「…」がそのままでは「…\w3」に置き換えられてしまうのを防いでます。
-＃　他にも置き換えたくないカッコ　（　などに使えます。
-
-
+＊sakura.portalsites
+ポストと狛犬
+https://github.com/ukatech/POST_and_KOMAINU
+：私たちのおうち。
+：管理人は……いまはリポジトリ、だな。
 

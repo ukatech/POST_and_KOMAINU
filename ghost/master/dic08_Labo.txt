@@ -253,8 +253,7 @@
 
 ＃
 ＃　↑FMO参照機能（仮）……今のとこ用途はないかも。
-＃　普通にこれ↓を使った方が良いです。
-＃http://www.geocities.co.jp/SiliconValley-Cupertino/8536/tips/communicate_ex1.html
+＃　普通に里々の仕様書（https://ukatech.github.io/satori-docs/ ）にある方法を使った方が良いです。
 ＃
 
 

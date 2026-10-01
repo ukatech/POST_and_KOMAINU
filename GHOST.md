@@ -11,7 +11,8 @@
 - SHIORI: `satori.dll`（Unicode 版、内部のバージョン表記は Mc201-5）。文字コードは UTF-8（`descript.txt` の `charset,UTF-8`）。辞書・設定・置換ファイルはすべて UTF-8（BOM なし）、改行は LF。
 - 里々の仕様書: https://github.com/ukatech/satori-docs （`grammar/` 文法、`shiori/` イベントと動作、`functions/` `（）` 内蔵関数、`system/` システム変数、`ssu/` ssu の関数）。里々の構文は推測で書かず、ここで確かめる。
 - `install.txt` は `directory,POST_and_KOMAINU`（インストール先）、`refresh,1`、`refreshundeletemask,satori_savedata.txt`（再インストールでもセーブデータを消さない）。
-- ネットワーク更新の URL は `dic06_String.txt` の `＠homeurl`（`descript.txt` には `homeurl` を書いていない）。値は旧 asahi-net の URL のままで、いまは使えないはず。
+- ネットワーク更新の URL は `dic06_String.txt` の `＠homeurl`（`descript.txt` には `homeurl` を書いていない）。いまはコメントアウトしてあり、値は `https://raw.githubusercontent.com/ukatech/POST_and_KOMAINU/main/`（`updates2.dau` を置く場所）。使うときはコメントを外す。
+- ポータルサイト（`＊sakura.portalsites`）は SSP、UKADOC、satori-docs、satoriya-shiori、このリポジトリだけ。おすすめサイトは、昔のものが無くなったので置いていない。ご意見の投稿先は、このリポジトリの Issues。
 
 ## ライセンス
 

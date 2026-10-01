@@ -47,8 +47,8 @@ shiori互換dll『里々（さとり）』用辞書
 ：はい、何でしょう。\![open,communicatebox]
 
 ＊ご意見やご要望など
-：ちょっとまってくださいね。\![open,browser,http://64.127.68.17/tree/cbbs.cgi?id=kusigahama]
-この辺に書き込んでみてください。
+：ちょっとまってくださいね。\![open,browser,https://github.com/ukatech/POST_and_KOMAINU/issues]
+GitHub の Issues に書き込んでみてください。
 
 
 ＊喋り頻度

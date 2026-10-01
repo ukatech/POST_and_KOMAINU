@@ -10,9 +10,8 @@
 ＃
 ＃　きのこ
 ＃
-＃　本体　　　　　http://hp.vector.co.jp/authors/VA007769/clearbrain/kinoko/
-＃　イベント仕様　http://hp.vector.co.jp/authors/VA007769/clearbrain/kinoko/shiori.htm
-＃　
+＃　（配布元のページは、いまは見つからない。）
+＃
 ＃　わびさびのマッシュルーム。
 ＃
 
@@ -78,8 +77,7 @@
 ＃
 ＃　猫どりふ
 ＃
-＃　本体　　　　　http://members.jcom.home.ne.jp/umeici/index.html
-＃　イベント仕様　http://members.jcom.home.ne.jp/umeici/toshiori.html
+＃　（配布元のページは、いまは見つからない。）
 ＃
 ＃　細かく対応してるとだんだん脳内麻薬が。
 ＃　「設定」-「会話/反応」をSHIORI/2.2にした場合に有効です。
@@ -277,7 +275,7 @@
 ＃
 ＃　汎用アプリケーションイベント
 ＃
-＃　提唱仕様　http://hp.vector.co.jp/authors/VA007769/clearbrain/any/comevent.htm
+＃　（提唱仕様のページは、いまは見つからない。）
 ＃
 ＃　とりあえず、どのアプリケーションでも使えて、便利そうなのだけ。
 ＃　「通知」は何か向きよね。

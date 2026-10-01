@@ -478,7 +478,7 @@ shiori互換dll『里々（さとり）』用辞書
 ＞（Ｒ０）を教えてもらった
 
 ＃ OnUserInputCancel対策
-＃ http://crow.aqrs.jp/reference/all/Shiori/main.html#OnUserInputCancel
+＃ https://ssp.shillest.net/ukadoc/manual/list_shiori_event.html
 ＃ サンプルとしてユーザ名を空打ちされたへ飛ばしてます。
 
 ＊OnUserInputCancel

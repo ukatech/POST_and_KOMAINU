@@ -2,7 +2,7 @@ charset,UTF-8
 
 craftman,Yagi Kushigahama
 craftmanw,櫛ヶ浜やぎ
-craftmanurl,http://www.geocities.co.jp/SiliconValley-Cupertino/8536/
+craftmanurl,https://github.com/ukatech/POST_and_KOMAINU
 
 name,ポストと狛犬
 type,ghost
