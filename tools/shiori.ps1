@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Sends one SHIORI request to the ghost's satori.dll with tamac.exe, without SSP.
+    Sends one SHIORI request to the ghost's satori.dll with tamacs.exe, without SSP.
 .DESCRIPTION
-    tamac.exe loads the dictionaries, sends the request, prints the response and unloads SATORI (tamac -r).
+    tamacs.exe loads the dictionaries, sends the request, prints the response and unloads SATORI (tamacs -r).
     SSP does not need to be running, and nothing appears on the desktop.
 
     Every call runs in a temporary copy of ghost/master that is deleted afterwards, so the real folder is not
@@ -27,7 +27,7 @@
     request). An ID that does not start with On is expanded as a name: a sentence, word group, variable or built-in
     name. -Header adds or replaces headers.
 
-    -Request sends the given text as it is. tamac.exe turns the line breaks into CRLF and adds the blank line.
+    -Request sends the given text as it is. tamacs.exe turns the line breaks into CRLF and adds the blank line.
 
     The SATORI messages that this request caused are shown after the response: [error] such as a call with
     arguments to a name that does not exist, a calculation that failed or a wrong number of arguments, [warning]
@@ -36,7 +36,7 @@
     whole log.
     Exit codes: 0 = OK, 1 = failed (satori.dll could not be loaded, the dictionaries have load errors, no or an
     error response), 2 = SATORI logged an error or a warning while handling the request (the response may be
-    incomplete), 3 = tamac.exe is not installed or has no -r option.
+    incomplete), 3 = tamacs.exe could not be built or satori.dll has no Set_loghandler (older than Mc201-10).
 .EXAMPLE
     powershell -NoProfile -ExecutionPolicy Bypass -File tools/shiori.ps1 -Event OnBoot
 .EXAMPLE
@@ -95,14 +95,9 @@ if (-not (Test-Path -LiteralPath (Join-Path $GhostDir 'satori.dll'))) {
     exit 1
 }
 
-$tamac = Get-DevkitToolPath 'tamac'
-if (-not (Test-Path -LiteralPath $tamac)) {
-    Write-Host 'shiori: SKIPPED - tamac.exe is not installed. Run: powershell -NoProfile -ExecutionPolicy Bypass -File tools/setup.ps1'
-    exit 3
-}
-# An older tamac.exe than minimumVersion in tools/tools.json may not have -r (added in v1.0.3.25); it would ignore it.
-if ((Test-DevkitToolCurrent 'tamac') -eq $false) {
-    Write-Host 'shiori: SKIPPED - this tamac.exe is too old. Run: powershell -NoProfile -ExecutionPolicy Bypass -File tools/setup.ps1 -Tool tamac'
+$tamacs = Get-DevkitTamacs
+if (-not $tamacs.Path) {
+    Write-Host "shiori: SKIPPED - $($tamacs.Error)"
     exit 3
 }
 
@@ -161,8 +156,7 @@ switch ($mode) {
     }
 }
 
-$tamacArgs = @('-r')
-$result = Invoke-DevkitTamac -GhostDir $GhostDir -Arguments $tamacArgs -InputText $requestText -EnableDebug:($mode -eq 'Eval') -Plain:$Plain -TimeoutSeconds $TimeoutSeconds
+$result = Invoke-DevkitTamacs -GhostDir $GhostDir -Arguments @('-r') -InputText $requestText -EnableDebug:($mode -eq 'Eval') -Plain:$Plain -TimeoutSeconds $TimeoutSeconds
 
 # Paths in the output are shown relative to the ghost root (the folder with ghost/ and shell/).
 $base = Split-Path (Split-Path $GhostDir -Parent) -Parent
@@ -212,11 +206,15 @@ if ($requestMessages.Count -gt 0) {
 }
 
 if ($result.TimedOut) {
-    Write-Host "shiori: FAILED - tamac.exe did not finish within $TimeoutSeconds seconds"
+    Write-Host "shiori: FAILED - tamacs.exe did not finish within $TimeoutSeconds seconds"
     exit 1
 }
+if ($result.ExitCode -eq 3) {
+    Write-Host 'shiori: SKIPPED - satori.dll has no Set_loghandler, which tamacs.exe needs (SATORI Mc201-10 or later). Update SATORI: docs/agents/workflows/update-satori.md'
+    exit 3
+}
 if ($response.Trim() -eq '') {
-    Write-Host "shiori: FAILED - tamac.exe printed no response (exit code $($result.ExitCode)); is satori.dll loadable? Use -ShowLog."
+    Write-Host "shiori: FAILED - tamacs.exe printed no response (exit code $($result.ExitCode)); is satori.dll loadable? Use -ShowLog."
     exit 1
 }
 if ($loadErrors -gt 0) {
@@ -224,7 +222,7 @@ if ($loadErrors -gt 0) {
     exit 1
 }
 if ($result.ExitCode -ne 0 -and $result.ExitCode -ne 2) {
-    Write-Host "shiori: FAILED (tamac.exe exit code $($result.ExitCode))"
+    Write-Host "shiori: FAILED (tamacs.exe exit code $($result.ExitCode))"
     exit 1
 }
 if ($failure) {

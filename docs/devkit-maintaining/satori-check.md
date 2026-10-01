@@ -10,7 +10,7 @@
 
 ## 見ているもの
 
-1. tamac が `[ERROR]` / `[FATAL]`（エラー）、`[WARN]`（警告）として出した行。Mc201-5 では、エラー用の行が遅れて、`1057598` でつながって出る（`tamac.md`）。
+1. tamacs が `[ERROR]` / `[FATAL]`（エラー）、`[WARN]`（警告）として出した行。Mc201-5 では、エラー用の行が遅れて、`1057598` でつながって出ていた（`tamacs.md`）。
 2. 通常のログの行。パターンの `level` は `error` / `warning` / `note`（`note` は `-IncludeNotes` のときだけ。`shiori.ps1` は付け、`check-dic.ps1` は付けない）。
 3. `LoadDicFolder(` から `ok.` までに `loading` の行が 1 つも無い → 辞書が 1 つも読まれていない。
 
@@ -24,6 +24,6 @@
 
 ## パターンを足すとき
 
-1. 里々のソース（`satoriya/satori/`、Shift_JIS）の `GetSender().sender() <<` と `errsender() <<` からメッセージを探し、`other/error-messages.md` と照らす。一時フォルダに壊れた辞書を作り、`tamac.exe -r`（`tools/shiori.ps1 -ShowLog`）で実際のログの行を確かめる。
+1. 里々のソース（`satoriya/satori/`、Shift_JIS）の `GetSender().sender() <<` と `errsender() <<` からメッセージを探し、`other/error-messages.md` と照らす。一時フォルダに壊れた辞書を作り、`tamacs.exe -r`（`tools/shiori.ps1 -ShowLog`）で実際のログの行を確かめる。
 2. `tools/satori.json` の `patterns` に、`level`、`regex`、`hint` を足す。日本語はこのファイルに書く（`tools/*.ps1` は ASCII だけ）。行頭の空白（ネストのインデント）を許す（`^\s*`）。
 3. 誤検出が出ないか、`tools/check-dic.ps1 -Run`（このゴーストの全文）で確かめる。

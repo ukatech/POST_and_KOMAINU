@@ -14,7 +14,7 @@
    - **Git**（推奨）: 変更履歴と GitHub での自動チェック・リリース。`fix` に winget のコマンドがあれば、了承を得てから実行する（`winget install --id Git.Git -e`）。winget がなければダウンロード先を案内する。
    - **SSP**（推奨）: 2.9.05 以降を使う。https://ssp.shillest.net/ から入手してもらう。すでに入っているのに見つからない場合は、`ssp.exe` の場所を聞いて `tools/local.json` に `{"sspPath": "C:\\path\\to\\ssp.exe"}` と書く（`tools/local.example.json` 参照）。見つかったのに `ssp` が ok でないときは版が古いので、更新を提案する（開発キットのスクリプトはこの版を前提にしていて、古い版では動かなかったり、問題を見落としたりする）。
    - アプリを入れた直後は PATH が反映されていないことがある。見つからないままなら、ターミナル（エージェント）を起動し直してもらう。
-3. `powershell -NoProfile -ExecutionPolicy Bypass -File tools/setup.ps1` を実行する。チェック用ツール（tamac.exe）を GitHub からダウンロードする（ダウンロードを伴うことを一言伝える）。最後に doctor の結果が出るので、`required` がすべて ok になったか確かめる。
+3. `powershell -NoProfile -ExecutionPolicy Bypass -File tools/setup.ps1` を実行する。チェック用ツール（tamacs.exe）を、Windows に入っている .NET Framework のコンパイラでビルドする（ダウンロードはない）。最後に doctor の結果が出るので、`required` がすべて ok になったか確かめる。
 4. `powershell -NoProfile -ExecutionPolicy Bypass -File tools/check.ps1` で、辞書とシェルのチェックが通ることを確かめる。
 5. doctor の `ghost-profile` が ok でなければ（`GHOST.md` が無い、または先頭に `<!-- devkit:ghost-template -->` が残っている）、`GHOST.md` を下書きする。
    - 無ければ `tools/devkit/seed/GHOST.md` を複製して始める。

@@ -1,11 +1,11 @@
-# Helpers for SATORI (satori.dll): version, a temporary copy of ghost/master to run it in, tamac.exe, and log analysis.
+# Helpers for SATORI (satori.dll): version, a temporary copy of ghost/master to run it in, tamacs.exe, and log analysis.
 # Dot-source after common.ps1:  . (Join-Path $PSScriptRoot 'lib/satori.ps1')
 # Keep every tools/*.ps1 and tools/lib/*.ps1 file ASCII-only and compatible with Windows PowerShell 5.1.
 # Japanese text (log patterns, the lines that switch the debug mode on) is in tools/satori.json.
 #
 # Why a temporary copy: SATORI writes satori_savedata.txt / satori_savebackup.txt into the ghost folder every time it
 # is unloaded, and the debug ID ShioriEcho works only when the dictionaries set the debug mode on (in the initialization sentence of
-# satori_conf.txt). So tamac.exe never runs in the real ghost/master; it runs in a copy that is deleted afterwards,
+# satori_conf.txt). So tamacs.exe never runs in the real ghost/master; it runs in a copy that is deleted afterwards,
 # and the debug lines are added to the copy only.
 
 $DevkitSatoriDataPath = Join-Path $DevkitToolsDir 'satori.json'
@@ -48,6 +48,14 @@ function Get-DevkitSatoriVersion([string]$Path) {
         Number  = New-Object System.Version(([int]($matches[1] + $matches[2])), [int]$matches[3])
         Text    = "phase $tag ($variant build)"
     }
+}
+
+# Tells whether a satori.dll exports Set_loghandler (since Mc201-10), through which tamacs.exe receives the log.
+# The export table holds the name as ASCII text that ends with a NUL character.
+function Test-DevkitSatoriLogHandler([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    $text = [Text.Encoding]::GetEncoding(28591).GetString([IO.File]::ReadAllBytes($Path))
+    return $text.Contains("Set_loghandler`0")
 }
 
 # --- reading and writing text files whose encoding is UTF-8 or Shift_JIS ---------------------------------------------
@@ -104,21 +112,55 @@ function Add-DevkitSatoriInitLines([string]$ConfPath, [string[]]$Lines) {
         }
         $all.InsertRange($insert, $Lines)
     }
-    $body = $file.Encoding.GetBytes(($all -join $newline))
-    $preamble = $file.Encoding.GetPreamble()
+    Write-DevkitTextFileAuto $ConfPath ($all -join $newline) $file.Encoding
+}
+
+# Writes text in the encoding that Read-DevkitTextFileAuto returned (with its BOM, if any).
+function Write-DevkitTextFileAuto([string]$Path, [string]$Text, [Text.Encoding]$Encoding) {
+    $body = $Encoding.GetBytes($Text)
+    $preamble = $Encoding.GetPreamble()
     $out = New-Object byte[] ($preamble.Length + $body.Length)
     [Array]::Copy($preamble, 0, $out, 0, $preamble.Length)
     [Array]::Copy($body, 0, $out, $preamble.Length, $body.Length)
-    [IO.File]::WriteAllBytes($ConfPath, $out)
+    [IO.File]::WriteAllBytes($Path, $out)
+}
+
+# Removes the entries of the SAORI word group (at sign + SAORI) from a satori_conf.txt, so that SATORI loads no SAORI.
+# SATORI reads that word group only from satori_conf.txt; its built-in ssu functions (calc and so on) stay.
+# Returns the names of the removed entries (the text before the first comma). Comment and blank lines are kept.
+function Remove-DevkitSatoriSaoriEntries([string]$ConfPath) {
+    if (-not (Test-Path -LiteralPath $ConfPath -PathType Leaf)) { return @() }
+    $file = Read-DevkitTextFileAuto $ConfPath
+    $newline = if ($file.Text.Contains("`r`n")) { "`r`n" } else { "`n" }
+    $at = [string][char]0xFF20
+    $heading = $at + 'SAORI'
+    $sentence = ([string](Get-DevkitSatoriData).initSentence).Substring(0, 1)
+    $comment = [string][char]0xFF03
+    $kept = New-Object System.Collections.Generic.List[string]
+    $names = New-Object System.Collections.Generic.List[string]
+    $inSaori = $false
+    foreach ($line in @($file.Text -split "\r?\n")) {
+        if ($line.StartsWith($at) -or $line.StartsWith($sentence)) {
+            $inSaori = ($line -split "`t")[0].TrimEnd() -eq $heading
+        } elseif ($inSaori -and $line.Trim() -ne '' -and -not $line.StartsWith($comment)) {
+            $names.Add($line.Split(',')[0].Trim())
+            continue
+        }
+        $kept.Add($line)
+    }
+    if ($names.Count -gt 0) { Write-DevkitTextFileAuto $ConfPath ($kept -join $newline) $file.Encoding }
+    return $names.ToArray()
 }
 
 # --- temporary copy of ghost/master ---------------------------------------------------------------------------------
 
-# Copies ghost/master to a temporary folder and returns the copy: [pscustomobject] Root (delete this), Dir (the copy).
+# Copies ghost/master to a temporary folder and returns the copy: [pscustomobject] Root (delete this), Dir (the copy),
+# SaoriNames (the SAORI that NoSaori removed).
 # EnableDebug adds the lines that switch the debug mode on (needed by ShioriEcho); Plain also turns off the automatic
-# waits and line breaks so that the script is easy to read.
+# waits and line breaks so that the script is easy to read. NoSaori removes the SAORI list from satori_conf.txt, so
+# that running the sentences cannot call a SAORI (fill_desktop and so on).
 function New-DevkitSatoriSandbox {
-    param([string]$GhostDir, [switch]$EnableDebug, [switch]$Plain)
+    param([string]$GhostDir, [switch]$EnableDebug, [switch]$Plain, [switch]$NoSaori)
     $root = Join-Path ([IO.Path]::GetTempPath()) ('devkit-satori-' + [guid]::NewGuid().ToString('N'))
     $dir = Join-Path $root (Split-Path $GhostDir -Leaf)
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
@@ -132,36 +174,44 @@ function New-DevkitSatoriSandbox {
         if ($EnableDebug) { $lines += @($data.debugLines) }
         if ($Plain) { $lines += @($data.plainLines) }
         if ($lines.Count -gt 0) { Add-DevkitSatoriInitLines (Join-Path $dir 'satori_conf.txt') $lines }
+        $saoriNames = @()
+        if ($NoSaori) { $saoriNames = @(Remove-DevkitSatoriSaoriEntries (Join-Path $dir 'satori_conf.txt')) }
     } catch {
         Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
         throw
     }
-    return [pscustomobject]@{ Root = $root; Dir = $dir }
+    return [pscustomobject]@{ Root = $root; Dir = $dir; SaoriNames = $saoriNames }
 }
 
-# --- tamac.exe ------------------------------------------------------------------------------------------------------
+# --- tamacs.exe -----------------------------------------------------------------------------------------------------
 
-# Runs tamac.exe on the satori.dll of a temporary copy of $GhostDir (see the top of this file), then deletes the copy.
-# tamac.exe takes the full path of the dll. Without -r in $Arguments it only loads and unloads SATORI; with -r it
-# also sends the request in $InputText and prints the response.
+# Runs tamacs.exe on the satori.dll of a temporary copy of $GhostDir (see the top of this file), then deletes the copy.
+# Call Get-DevkitTamacs first to tell the user when it is not available.
+# tamacs.exe takes the full path of the dll. Without -r in $Arguments it only loads and unloads SATORI; with -r it
+# also sends the request in $InputText and prints the response. Exit code 3: satori.dll has no Set_loghandler.
+# NoSaori runs it without SAORI (see New-DevkitSatoriSandbox).
 # Returns ExitCode, TimedOut, Response (the SHIORI response with -r), Log (everything SATORI logged; [ERROR] lines
-# that tamac.exe adds are included), and Sandbox (the path that appears in the log instead of $GhostDir).
-function Invoke-DevkitTamac {
+# that tamacs.exe adds are included), Sandbox (the path that appears in the log instead of $GhostDir), and SaoriNames
+# (the SAORI that NoSaori removed).
+function Invoke-DevkitTamacs {
     param(
         [string]$GhostDir,
         [string[]]$Arguments = @(),
         [string]$InputText,
         [switch]$EnableDebug,
         [switch]$Plain,
+        [switch]$NoSaori,
         [int]$TimeoutSeconds = 120
     )
-    $sandbox = New-DevkitSatoriSandbox -GhostDir $GhostDir -EnableDebug:$EnableDebug -Plain:$Plain
+    $tamacs = Get-DevkitTamacs
+    if (-not $tamacs.Path) { throw $tamacs.Error }
+    $sandbox = New-DevkitSatoriSandbox -GhostDir $GhostDir -EnableDebug:$EnableDebug -Plain:$Plain -NoSaori:$NoSaori
     try {
         $processArgs = @{
-            FilePath         = (Get-DevkitToolPath 'tamac')
+            FilePath         = $tamacs.Path
             Arguments        = @(Join-Path $sandbox.Dir 'satori.dll') + @($Arguments)
             WorkingDirectory = $sandbox.Dir
-            # On GitHub Actions tamac.exe switches to its --ci output by itself; the plain log is read here.
+            # On GitHub Actions tamacs.exe switches to its --ci output by itself; the plain log is read here.
             UnsetEnvironment = @('GITHUB_ACTIONS')
             TimeoutSeconds   = $TimeoutSeconds
         }
@@ -183,8 +233,9 @@ function Invoke-DevkitTamac {
         ExitCode = $result.ExitCode
         TimedOut = $result.TimedOut
         Response = $response
-        Log      = ($log -replace "\r\n", "`n")
-        Sandbox  = $sandbox.Dir
+        Log        = ($log -replace "\r\n", "`n")
+        Sandbox    = $sandbox.Dir
+        SaoriNames = $sandbox.SaoriNames
     }
 }
 
@@ -210,10 +261,10 @@ function Get-DevkitSatoriPatterns {
     return $script:DevkitSatoriPatternCache
 }
 
-# Finds the problems in a SATORI log (the text that tamac.exe prints). Returns objects with
+# Finds the problems in a SATORI log (the text that tamacs.exe prints). Returns objects with
 #   Level (error / warning / note; notes only with -IncludeNotes), Message, Hint, In (the sentence that was being run, when known), File (a dictionary path
 #   that the message is about, when the log names one), Phase (load / operation / after).
-# SATORI writes plain lines to its log and sends only some of its errors as [ERROR] lines through tamac.exe, so both
+# SATORI writes plain lines to its log and sends only some of its errors as [ERROR] lines through tamacs.exe, so both
 # are read: the [ERROR] / [FATAL] / [WARN] lines, and the plain lines that match tools/satori.json.
 function Get-DevkitSatoriDiagnostics {
     param([string]$Log, [string]$Sandbox, [string]$GhostDir, [string]$Base, [switch]$IncludeNotes)
@@ -259,8 +310,8 @@ function Get-DevkitSatoriDiagnostics {
             }
             continue
         }
-        if ($line -match '^\[tamac\]') {
-            if ($line -notmatch 'CI_check_failed') { Add-Found 'error' $line '' '' '' $phase }
+        if ($line -match '^\[tamacs\]') {
+            Add-Found 'error' $line '' '' '' $phase
             continue
         }
 

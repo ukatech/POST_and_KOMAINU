@@ -8,7 +8,7 @@
 
 前提: `tools/run-ssp.ps1` が立てた試験用 SSP で、このフォルダのゴーストが動いていること。さくらスクリプトやイベントを試すときは、どんなに小さな確認でも、**まず手順 0 で試験用 SSP を立ててから送る**。試験用 SSP が動いていないと、`tools/sstp.ps1` は作者がふだん使っている SSP（9801）に送ってしまう。作者の SSP には、作者に頼まれたとき（`-Shared`）以外は送らず、そこにいるほかのゴーストにも送らない（`-AnyGhost` は、今いちばん前にいる、作者のほかのゴーストに届くことがある）。
 
-トークが返すスクリプトや実行時のエラーだけを見るなら、SSP は要らない。`powershell -NoProfile -ExecutionPolicy Bypass -File tools/shiori.ps1 -Eval '（トークの名前）'`（イベントなら `-Event OnMouseDoubleClick -Reference '0,0,0,0,Head'`、ランダムトークなら `-Event OnTalk`）で、tamac.exe がその場で辞書を読み込んで答える（使い方は `docs/agents/commands.md` の「里々の文を試す」）。SSP では、表示、表情、掛け合いのテンポ、SSP が解釈できないタグを確かめる。
+トークが返すスクリプトや実行時のエラーだけを見るなら、SSP は要らない。`powershell -NoProfile -ExecutionPolicy Bypass -File tools/shiori.ps1 -Eval '（トークの名前）'`（イベントなら `-Event OnMouseDoubleClick -Reference '0,0,0,0,Head'`、ランダムトークなら `-Event OnTalk`）で、tamacs.exe がその場で辞書を読み込んで答える（使い方は `docs/agents/commands.md` の「里々の文を試す」）。SSP では、表示、表情、掛け合いのテンポ、SSP が解釈できないタグを確かめる。
 
 ## 手順
 

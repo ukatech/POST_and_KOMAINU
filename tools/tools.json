@@ -1,11 +1,2 @@
 {
-  "tamac": {
-    "description": "Log receiver of the tama family; loads a SHIORI dll (SATORI, YAYA, ...), sends one request and prints the response and the log (https://github.com/YAYA-shiori/tama)",
-    "version": "latest",
-    "repository": "YAYA-shiori/tama",
-    "asset": "tamac.exe",
-    "minimumVersion": "1.0.3.26",
-    "type": "exe",
-    "exe": "tamac.exe"
-  }
 }

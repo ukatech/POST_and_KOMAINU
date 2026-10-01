@@ -28,7 +28,8 @@
 
 - チェックは `ghost/master` の一時コピーで行う。里々が終了時に書く `satori_savedata.txt` / `satori_savebackup.txt` を、本物のフォルダに残さないため。
 - `satori.dll` は、ビルドによっては `[ERROR]` の通知が遅れたり、まとめて出たりする（Mc201-5 で確認）。ログの通常の行からも拾っているので、表示は変わらない。
-- チェックに使う tamac.exe は、YAYA 用に作られたログ受信ツールで、里々のログもそのまま受け取れる。`Interface "CI_check_failed" not found` の行は、YAYA 用の機能が無いだけなので無視してよい（スクリプトは隠している）。
+- チェックに使う tamacs.exe は、YAYA と里々の両方のログを `Set_loghandler` で受け取る。`Set_loghandler` は里々 Mc201-10 から入ったので、それより古い `satori.dll` では、チェックが SKIPPED（終了コード 3）になる。`docs/agents/workflows/update-satori.md` の手順で更新する。
+- `-Run` は SAORI を動かさない（一時コピーの `satori_conf.txt` から `＠SAORI` を外す）。SAORI の呼び出しそのものは確かめないので、SAORI を使う文は `tools/shiori.ps1` で、作者の了解を得てから試す。
 
 ## 関連
 

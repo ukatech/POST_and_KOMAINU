@@ -34,7 +34,7 @@ AI 開発キットそのもの（`AGENTS.md`、`CLAUDE.md`、`DEVKIT-GUIDE.md`�
 
 ## YAYA 版キット（konnoyayame）との共用
 
-このキットは、YAYA 版の開発キット（テンプレートゴースト「紺野ややめ」に入っているもの）を里々向けに移植したものである。YAYA 版は、兄弟リポジトリ `../konnoyayame`（https://github.com/YAYA-shiori/konnoyayame ）にある。SSP、シェル、nar、キットの更新まわりなど、SHIORI に依存しない部分は両方のキットで同じものを使っている（例: `tools/run-ssp.ps1`、`tools/sstp.ps1`、`tools/ssp-log.ps1`、`tools/check-shell.ps1`、`tools/dump-surface.ps1`、`tools/image.ps1`、`tools/build-nar.ps1`、`tools/update-devkit.ps1`、`tools/lib/` の共通部分、対応する `docs/agents/` と `docs/devkit-maintaining/` の文書）。
+このキットは、YAYA 版の開発キット（テンプレートゴースト「紺野ややめ」に入っているもの）を里々向けに移植したものである。YAYA 版は、兄弟リポジトリ `../konnoyayame`（https://github.com/YAYA-shiori/konnoyayame ）にある。SSP、シェル、nar、キットの更新まわりなど、SHIORI に依存しない部分は両方のキットで同じものを使っている（例: `tools/run-ssp.ps1`、`tools/sstp.ps1`、`tools/ssp-log.ps1`、`tools/check-shell.ps1`、`tools/dump-surface.ps1`、`tools/image.ps1`、`tools/lib/tamacs.cs`（とそれをビルドする `tools/lib/common.ps1` の `Get-DevkitTamacs`）、`tools/build-nar.ps1`、`tools/update-devkit.ps1`、`tools/lib/` の共通部分、対応する `docs/agents/` と `docs/devkit-maintaining/` の文書）。
 
 - **両方のキットで共用しているツールや文書を直すときは、`../konnoyayame` と `../POST_and_KOMAINU` の両方を直す。** 片方だけ直すと、同じ不具合が片方に残ったり、挙動が食い違ったりする。
 - **新しく作るツールや機能が SHIORI に依存せず、もう片方のキットでも役に立つなら、両方に追加する。** SHIORI 固有の部分（`check-dic.ps1`、`shiori.ps1`、`update-satori.ps1` ↔ `update-yaya.ps1`、里々の辞書の書き方 ↔ YAYA 辞書の書き方など）は、もう片方の対応するものに置き換えて持っていく（里々の文と YAYA の関数、ログのパターン、更新元のリリースなどを訳し直す）。
@@ -72,15 +72,16 @@ AI 開発キットそのもの（`AGENTS.md`、`CLAUDE.md`、`DEVKIT-GUIDE.md`�
 - Windows PowerShell 5.1 と PowerShell 7 の両方で動かす。`??`、`?.`、三項演算子、パイプラインの `&&` など、7 だけの構文は使わない。GitHub Actions では pwsh（Windows と Ubuntu）でも動く。
 - **ASCII 文字だけで書く**（BOM のないファイルに日本語を書くと、5.1 で文字化けする）。里々の文やログのパターンなど、日本語が要るものは `tools/satori.json` に置く。
 - 冒頭で `. (Join-Path $PSScriptRoot 'lib/common.ps1')` を読み、`Initialize-DevkitConsole` を呼ぶ。パスは `$DevkitRoot` から組み立て、`ghost/master` と `shell/master` を前提にしてよい。
-- 里々に関わる処理（版の読み取り、一時コピー、ログの解析）は `tools/lib/satori.ps1` にある（`Get-DevkitSatoriVersion`、`New-DevkitSatoriSandbox`、`Get-DevkitSatoriDiagnostics` など）。里々は、アンロードのたびにセーブデータを書くので、ゴーストのフォルダで直接動かさず、`ghost/master` の一時コピーで動かす（`docs/devkit-maintaining/tamac.md`）。
+- 里々に関わる処理（版の読み取り、一時コピー、ログの解析）は `tools/lib/satori.ps1` にある（`Get-DevkitSatoriVersion`、`New-DevkitSatoriSandbox`、`Get-DevkitSatoriDiagnostics` など）。里々は、アンロードのたびにセーブデータを書くので、ゴーストのフォルダで直接動かさず、`ghost/master` の一時コピーで動かす（`docs/devkit-maintaining/tamacs.md`）。
 - 終了コードをそろえる: 0 OK / 1 失敗・エラー / 2 注意が要る（SSP のエラーログの Error、`.devkit-new` の残り、里々が実行時に出したエラーなど）/ 3 ツールや SSP が無くて確かめられない。
 - 冒頭のコメントヘルプ（`.SYNOPSIS`、`.DESCRIPTION`、終了コード、`.EXAMPLE`）を書き、`docs/agents/commands.md` のコマンド表も直す。
-- ダウンロードして使うツールは `tools/tools.json` に書く。書き方は 2 通りある。
+- satori.dll を読み込むのは tamacs.exe（`tools/lib/tamacs.cs`。YAYA 版のキットと同じファイル）。キットが自分でビルドするので、`tools/tools.json` には書かない（`docs/devkit-maintaining/tamacs.md`）。
+- ダウンロードして使うツールは `tools/tools.json` に書く（今は無い）。書き方は 2 通りある。
   - 版を固定する（今は使っているツールが無い）: `version`、`url`、`sha256` を書く。上げるときは 3 つとも書き換え（SHA256 は `Get-FileHash -Algorithm SHA256`）、`tools/setup.ps1 -Tool <名前>` で取り直せることを確かめる（取得済みの exe の SHA256 が違えば取り直す）。
-  - 最新リリースを使う（tamac。伺かのログ受信ツール tama のコンソール版で、新しい機能をキットの更新を待たずに使えるようにするため）: `version` を `latest` にし、`repository`、`asset`（リリースのファイル名）、`minimumVersion` を書く。1 つの exe のツールだけに使う（zip では、取得済みのものが最新か見分けられない）。
+  - 最新リリースを使う（以前は tamac。伺かのログ受信ツール tama のコンソール版で、新しい機能をキットの更新を待たずに使えるようにするため）: `version` を `latest` にし、`repository`、`asset`（リリースのファイル名）、`minimumVersion` を書く。1 つの exe のツールだけに使う（zip では、取得済みのものが最新か見分けられない）。
     - `tools/setup.ps1` は GitHub API で最新リリースを調べ、GitHub が各ファイルに付けている SHA256（`digest`）で照合する。`digest` が無ければ失敗させる。GitHub Actions では、匿名の API 呼び出しの回数制限を避けるため、`auto_check.yml` から `GITHUB_TOKEN` を渡している（`Get-DevkitLatestReleaseAsset` は、トークンが拒否されたら付けずにやり直す）。
     - `doctor.ps1` と `tools/shiori.ps1` はネットワークに出ずに、exe のファイルバージョンが `minimumVersion` 以上かを見る（`Test-DevkitToolCurrent`）。キットのスクリプトが新しいオプションを使い始めたら `minimumVersion` を上げる。
-    - 新しいリリースで挙動が変わると、すべてのゴーストの auto check に影響する。tamac のリリースの前に、このリポジトリで `tools/check.ps1 -Run` と `tools/shiori.ps1` を試す。
+    - 新しいリリースで挙動が変わると、すべてのゴーストの auto check に影響する。リリースの前に、このリポジトリで `tools/check.ps1 -Run` と `tools/shiori.ps1` を試す。
 
 ## 実装メモ
 
@@ -91,7 +92,7 @@ AI 開発キットそのもの（`AGENTS.md`、`CLAUDE.md`、`DEVKIT-GUIDE.md`�
 | `ssp.md` | SSTP（Owned SSTP）、SSP のログ、SSP の版の扱い、使っている機能（`GetStatus`、`Option: strict`、`dumpballoon`、`--dump-error-log`、`--offline-tool`）、試験用 SSP（`tools/run-ssp.ps1`） |
 | `dump-surface.md` | `tools/dump-surface.ps1` と `--offline-dump` の `--dump-surface-list`、`--dump-animation`、`--dump-bind` |
 | `image.md` | `tools/image.ps1` と `tools/lib/image.cs`、`tools/lib/image-engine.ps1`（コンパイルとキャッシュ、自前の PNG の読み書き、SSP の透過の扱い） |
-| `tamac.md` | tamac.exe の `-r`、里々（`satori.dll`）を動かすときの一時コピー（`tools/lib/satori.ps1` の `New-DevkitSatoriSandbox`）、`ShioriEcho` と `tools/shiori.ps1` |
+| `tamacs.md` | tamacs.exe（`tools/lib/tamacs.cs`）のビルドと `-r`、里々（`satori.dll`）を動かすときの一時コピー（`tools/lib/satori.ps1` の `New-DevkitSatoriSandbox`）、`-Run` で SAORI を外すこと、`ShioriEcho` と `tools/shiori.ps1` |
 | `satori-check.md` | 里々のログの読み方（`tools/check-dic.ps1` と `tools/shiori.ps1`。`tools/satori.json` の `patterns`、誤検出を避ける扱い、パターンを足す手順） |
 | `update-satori.md` | `tools/update-satori.ps1` の `satori.zip`（ukatech/satoriya-shiori）の取得と置き換え、版の系統（Unicode 版 `Mc2XX` と ACP 版 `Mc1XX`）の選び方 |
 | `ignore.md` | `.narignore` / `.updateignore` の解釈（`tools/lib/ignore.ps1`） |

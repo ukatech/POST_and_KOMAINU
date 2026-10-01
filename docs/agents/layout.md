@@ -24,8 +24,8 @@
 | `DEVKIT-GUIDE.md` | 開発キットの使い方（作者向け）。キットについて作者に説明するときは、ここを案内する |
 | `docs/agents/` | エージェント向けの資料（一覧は `AGENTS.md` の「資料」）と、`workflows/` の作業手順書 |
 | `CLAUDE.md`, `.claude/`, `.mcp.json` | Claude Code 用の設定（編集後の自動チェックと起動時の診断、調査用サブエージェント、仕様検索 MCP） |
-| `.github/workflows/auto_check.yml` | push ごとに辞書チェック（tamac）する |
+| `.github/workflows/auto_check.yml` | push ごとに辞書チェック（tamacs）する |
 
-実行時に作られるもの（編集もコミットもしない）: `ghost/master/satori_savedata.txt` と `satori_savebackup.txt`（変数の保存先。ゴーストの終了時に里々が書く。暗号化を有効にしたときは `.sat`）、`ghost/master/profile/`、`shell/master/profile/`、`tools/bin/`（ダウンロードしたツール）、`tools/local.json`（各自の設定）、`build/`。
+実行時に作られるもの（編集もコミットもしない）: `ghost/master/satori_savedata.txt` と `satori_savebackup.txt`（変数の保存先。ゴーストの終了時に里々が書く。暗号化を有効にしたときは `.sat`）、`ghost/master/profile/`、`shell/master/profile/`、`tools/bin/`（ビルドした tamacs.exe と、ダウンロードしたツール）、`tools/local.json`（各自の設定）、`build/`。
 
 `tools/check-dic.ps1` と `tools/shiori.ps1` は、`ghost/master` の一時コピーで里々を動かすので、実行してもこのフォルダに `satori_savedata.txt` などは残らない。

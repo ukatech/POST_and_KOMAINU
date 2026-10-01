@@ -72,7 +72,7 @@ $parts = @(
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 $ProgressPreference = 'SilentlyContinue'
 
-# Runs check-dic on the ghost and returns its exit code (1 = errors, 3 = tamac.exe is not installed).
+# Runs check-dic on the ghost and returns its exit code (1 = errors, 3 = not checked: tamacs.exe is not available).
 function Invoke-DictionaryCheck {
     $powershell = (Get-Process -Id $PID).Path
     $ErrorActionPreference = 'Continue'
@@ -222,7 +222,7 @@ try {
                 Write-Host 'update-satori: the dictionary check failed with the new files; putting the old ones back'
                 $failed = $true
             } elseif ($checkCode -eq 3) {
-                Write-Host 'update-satori: WARNING - tamac.exe is not installed, so the new files were not verified'
+                Write-Host 'update-satori: WARNING - the dictionaries could not be checked (tamacs.exe), so the new files were not verified'
             }
         }
         if ($failed) {

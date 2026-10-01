@@ -13,14 +13,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: install tamac
-        shell: pwsh
-        env:
-          # tamac.exe comes from its latest release; the token avoids the rate limit of anonymous GitHub API requests
-          GITHUB_TOKEN: ${{ github.token }}
-        run: ./tools/setup.ps1 -Tool tamac
       - name: dictionary check
-        # Loads satori.dll with tamac.exe in a temporary copy of ghost/master and reads the SATORI log
+        # Builds tamacs.exe from tools/lib/tamacs.cs with csc.exe of the .NET Framework on the runner, loads
+        # satori.dll with it in a temporary copy of ghost/master and reads the SATORI log
         shell: pwsh
         run: ./tools/check-dic.ps1 -Ci
       - name: development kit lock check

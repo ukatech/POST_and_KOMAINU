@@ -35,7 +35,7 @@ $isGitWorkingCopy = Test-Path -LiteralPath (Join-Path $DevkitRoot '.git')
 # --- Windows ---------------------------------------------------------------------------
 $isWindowsOs = [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT
 Add-DoctorItem -Id 'windows' -Name 'Windows' -Level 'required' -Ok $isWindowsOs `
-    -Purpose 'SSP, SATORI and tamac.exe run only on Windows' `
+    -Purpose 'SSP, SATORI and tamacs.exe run only on Windows' `
     -Detail ([Environment]::OSVersion.VersionString) `
     -Fix 'Use a Windows PC.'
 
@@ -69,6 +69,13 @@ Add-DoctorItem -Id 'satori-build' -Name 'SATORI build' -Level 'recommended' -Ok 
     -Detail $(if ($satoriVersion) { "$($satoriVersion.Text); charset in descript.txt: $(if ($charset) { $charset } else { '(none)' })" } else { 'satori.dll not found' }) `
     -Fix "Run: $ps tools/update-satori.ps1 -Variant Unicode (see docs/agents/workflows/update-satori.md)"
 
+# tamacs.exe receives the SATORI log through Set_loghandler, which satori.dll exports since Mc201-10.
+$logHandlerOk = (-not (Test-Path -LiteralPath $dll)) -or (Test-DevkitSatoriLogHandler $dll)
+Add-DoctorItem -Id 'satori-loghandler' -Name 'SATORI Mc201-10+' -Level 'required' -Ok $logHandlerOk `
+    -Purpose 'tamacs.exe reads the SATORI log through Set_loghandler: dictionary check (tools/check-dic.ps1 and the check after each edit), tools/shiori.ps1' `
+    -Detail $(if (-not (Test-Path -LiteralPath $dll)) { 'satori.dll not found (see ghost files)' } elseif ($logHandlerOk) { 'satori.dll has Set_loghandler' } else { "$($satoriVersion.Text) has no Set_loghandler" }) `
+    -Fix "Run: $ps tools/update-satori.ps1 (see docs/agents/workflows/update-satori.md)"
+
 # --- ghost profile and kit updates -----------------------------------------------------
 $ghostProfile = Join-Path $DevkitRoot 'GHOST.md'
 $profileState = 'ok'
@@ -88,22 +95,14 @@ Add-DoctorItem -Id 'devkit-conflicts' -Name 'development kit merges' -Level 'rec
     -Detail $(if ($conflicts.Count -eq 0) { 'nothing to merge' } else { 'waiting to be merged: ' + ($conflicts -join ', ') }) `
     -Fix $('Merge each <file>.devkit-new into <file>, then delete the .devkit-new file (docs/agents/workflows/update-devkit.md).' + $(if ($conflicts -contains 'AGENTS.md.devkit-new') { ' Start with AGENTS.md.devkit-new.' } else { '' }))
 
-# --- downloaded tools ------------------------------------------------------------------
-$manifest = Get-DevkitToolManifest
-$tamacPath = Get-DevkitToolPath 'tamac'
-$tamacCurrent = Test-DevkitToolCurrent 'tamac'
-$tamacVersion = if ($null -ne $tamacCurrent) { Get-DevkitFileVersion $tamacPath } else { $null }
-Add-DoctorItem -Id 'tamac' -Name 'tamac.exe' -Level 'required' -Ok ($null -ne $tamacCurrent) `
-    -Purpose 'Dictionary check (tools/check-dic.ps1 and the check after each edit) and SHIORI requests (tools/shiori.ps1)' `
-    -Detail $(if ($null -eq $tamacCurrent) { 'not installed' } elseif ($tamacVersion) { "v$tamacVersion in tools/bin" } else { 'in tools/bin (version unknown)' }) `
-    -Fix "Run: $ps tools/setup.ps1"
-
-# An older tamac.exe still checks the dictionaries, so being out of date is only recommended.
-$tamacMinimum = $manifest.tamac.minimumVersion
-Add-DoctorItem -Id 'tamac-version' -Name "tamac.exe $tamacMinimum or later" -Level 'recommended' -Ok ($tamacCurrent -ne $false) `
-    -Purpose 'SHIORI requests without SSP (tools/shiori.ps1); older versions have no -r option' `
-    -Detail $(if ($null -eq $tamacCurrent) { 'not installed (see tamac.exe)' } elseif ($tamacCurrent) { 'ok' } else { "v$tamacVersion is older than $tamacMinimum" }) `
-    -Fix "Run: $ps tools/setup.ps1 -Tool tamac (downloads the latest release)"
+# --- tamacs.exe (built from tools/lib/tamacs.cs on first use; doctor does not build it) ----
+$tamacsExe = Get-DevkitTamacsExpectedPath
+$tamacsBuilt = Test-Path -LiteralPath $tamacsExe -PathType Leaf
+$csc = Get-DevkitCscPath
+Add-DoctorItem -Id 'tamacs' -Name 'tamacs.exe' -Level 'required' -Ok ($tamacsBuilt -or [bool]$csc) `
+    -Purpose 'Loads satori.dll without SSP: dictionary check (tools/check-dic.ps1 and the check after each edit), tools/shiori.ps1' `
+    -Detail $(if ($tamacsBuilt) { 'built in tools/bin' } elseif ($csc) { "built from tools/lib/tamacs.cs on first use with $csc" } else { 'not built, and csc.exe of the .NET Framework 4 was not found' }) `
+    -Fix 'csc.exe comes with the .NET Framework 4.8, which is part of Windows. Turn it on in "Turn Windows features on or off" if it has been turned off.'
 
 # --- SSP -------------------------------------------------------------------------------
 $ssp = Resolve-SspPath
