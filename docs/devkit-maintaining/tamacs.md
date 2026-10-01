@@ -23,6 +23,7 @@ tamacs は、SHIORI の dll を SSP なしで読み込むツール。伺かの�
 
 ## tamacsw.exe（ログ受信ウインドウ）
 
+- `tamacsw.cs` と `common.ps1` のビルド関数（`Get-DevkitCsTool`、`Get-DevkitTamacsw`）は、tamacs と同じく YAYA 版のキット（konnoyayame）と共用する。起動用の `receiver.*` は里々版（このゴースト）だけに置く。YAYA のゴーストは tama をそのまま使う。
 - SSP で動いている里々のログを表示する GUI。旧版の「れしば」の代わりで、ゴーストの `ghost/master/receiver.bat` → `receiver.ps1` から起動する（`receiver.*` はキットではなくゴーストのファイル）。ソースは `tools/lib/tamacsw.cs`、ビルドは `tools/lib/common.ps1` の `Get-DevkitTamacsw`（`/target:winexe`、dll を読まないので `/platform:anycpu`。tamacs と同じく `Get-DevkitCsTool` で `tools/bin/tamacsw-<hash>.exe` にする）。
 - 里々（`satoriya/_/Sender.cpp`）は、読み込まれたあと最初にログを送るときに一度だけ、`FindWindow("れしば", "れしば")`、なければ `FindWindow("TamaWndClass", NULL)` で受信ウインドウを探す。見つからなければ、そのロードの間は探し直さない（`＄れしば送信＝有効` で探し直す）。だから、ゴーストより先に開いてもらう。
 - `TamaWndClass` には、`dwData` にログ種別（tamacs の `E_*` と同じ値）、`lpData` に UTF-16 の 1 行（末尾に LF。`E_END` 以上は制御用で空）を `WM_COPYDATA` で送る。最初に `E_UTF8` を送る。送り側は `SendMessageTimeout`（5 秒）で待つので、tamacsw はウインドウプロシージャでは行をためるだけにして、100 ミリ秒ごとのタイマーで表示する。`E_END`（アンロード）は区切りの行として表示する。

@@ -34,7 +34,7 @@ AI 開発キットそのもの（`AGENTS.md`、`CLAUDE.md`、`DEVKIT-GUIDE.md`�
 
 ## YAYA 版キット（konnoyayame）との共用
 
-このキットは、YAYA 版の開発キット（テンプレートゴースト「紺野ややめ」に入っているもの）を里々向けに移植したものである。YAYA 版は、兄弟リポジトリ `../konnoyayame`（https://github.com/YAYA-shiori/konnoyayame ）にある。SSP、シェル、nar、キットの更新まわりなど、SHIORI に依存しない部分は両方のキットで同じものを使っている（例: `tools/run-ssp.ps1`、`tools/sstp.ps1`、`tools/ssp-log.ps1`、`tools/check-shell.ps1`、`tools/dump-surface.ps1`、`tools/image.ps1`、`tools/lib/tamacs.cs`（とそれをビルドする `tools/lib/common.ps1` の `Get-DevkitTamacs`）、`tools/build-nar.ps1`、`tools/update-devkit.ps1`、`tools/lib/` の共通部分、対応する `docs/agents/` と `docs/devkit-maintaining/` の文書）。
+このキットは、YAYA 版の開発キット（テンプレートゴースト「紺野ややめ」に入っているもの）を里々向けに移植したものである。YAYA 版は、兄弟リポジトリ `../konnoyayame`（https://github.com/YAYA-shiori/konnoyayame ）にある。SSP、シェル、nar、キットの更新まわりなど、SHIORI に依存しない部分は両方のキットで同じものを使っている（例: `tools/run-ssp.ps1`、`tools/sstp.ps1`、`tools/ssp-log.ps1`、`tools/check-shell.ps1`、`tools/dump-surface.ps1`、`tools/image.ps1`、`tools/lib/tamacs.cs` と `tools/lib/tamacsw.cs`（とそれらをビルドする `tools/lib/common.ps1` の `Get-DevkitCsTool`、`Get-DevkitTamacs`、`Get-DevkitTamacsw`。ログ受信ウインドウを開く `ghost/master/receiver.*` は里々版だけ）、`tools/build-nar.ps1`、`tools/update-devkit.ps1`、`tools/lib/` の共通部分、対応する `docs/agents/` と `docs/devkit-maintaining/` の文書）。
 
 - **両方のキットで共用しているツールや文書を直すときは、`../konnoyayame` と `../POST_and_KOMAINU` の両方を直す。** 片方だけ直すと、同じ不具合が片方に残ったり、挙動が食い違ったりする。
 - **新しく作るツールや機能が SHIORI に依存せず、もう片方のキットでも役に立つなら、両方に追加する。** SHIORI 固有の部分（`check-dic.ps1`、`shiori.ps1`、`update-satori.ps1` ↔ `update-yaya.ps1`、里々の辞書の書き方 ↔ YAYA 辞書の書き方など）は、もう片方の対応するものに置き換えて持っていく（里々の文と YAYA の関数、ログのパターン、更新元のリリースなどを訳し直す）。
