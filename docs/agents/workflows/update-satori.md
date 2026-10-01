@@ -37,7 +37,7 @@
 5. 変わったことを伝える。
    - 出力の `notes` のリリースノートと、`satori-docs` の `other/unicode-changes`（`McXYY-Z での修正`）を読み、挙動が変わる修正があれば要約する。プレリリース（Unicode 版）を入れたときは、そのことも伝える。
 6. 確かめる。
-   - `tools/check-dic.ps1 -Run` は、名前が単純な文を全部実行するので、版が上がって展開の挙動が変わっていないかを見つけやすい（SAORI は動かさないので、SAORI の呼び出しは確かめられない）。
+   - `tools/check-dic.ps1 -Run` は、名前が単純な文を全部実行するので、版が上がって展開の挙動が変わっていないかを見つけやすい。
    - `tools/shiori.ps1 -Event OnBoot` と `-Event OnTalk` が応答を返すこと。
    - 作者が SSP で試したいと言えば、`docs/agents/workflows/try-in-ssp.md` の手順で起動する。
 7. git の作業コピーなら、変更をコミットするか聞く（勝手にコミットしない）。`satori.dll` などのバイナリなので、コミットメッセージにバージョン（`satori.dll を Mc201-5 に更新` など）を書くと後で追える。

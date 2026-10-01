@@ -9,7 +9,7 @@
     touched (SATORI writes satori_savedata.txt and satori_savebackup.txt when it unloads). The copy has the
     variables that the real satori_savedata.txt holds. Each call loads the ghost from scratch: no OnBoot or other
     event is sent before the request. The code runs in the real dictionaries, though: code that calls SAORI
-    (fill_desktop and so on) or runs programs really does so.
+    (a SAORI that changes the screen and so on) or runs programs really does so.
 
     -Eval expands SATORI text with ShioriEcho, SATORI's own debug ID. Each line of the text is one line of a
     sentence body (Reference0, Reference1, ...), handled like a line in a dictionary: an expression in full-width

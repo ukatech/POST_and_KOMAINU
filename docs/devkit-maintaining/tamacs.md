@@ -38,15 +38,6 @@ tamacs は、SHIORI の dll を SSP なしで読み込むツール。伺かの�
 - 一時コピーのパスは、ログには出るので、表示するときに `ghost/master` に読み替え、さらにゴーストのルートからの相対パスにする（`ConvertTo-DevkitGhostText`）。
 - 一時コピーの分、動きが遅くなる。ゴーストが数百 MB の音声などを持つときは、`ghost/master` の下に置く場所を見直す。
 
-## `-Run` では SAORI を外す
-
-- `check-dic -Run` は名前の付いた文をすべて実行するので、`（fill_desktop,0,0,255）` のように `sync,` なしで SAORI を呼ぶ文があると、その場で SAORI が動く（ポストと狛犬では、作者の画面が赤く塗られたままになった。戻す `＊もどす` は `sync,` 付きで、SSP が再生するときにしか呼ばれない）。そこで、文を実行する一時コピーでは、`satori_conf.txt` の `＠SAORI` の登録を外す（`New-DevkitSatoriSandbox -NoSaori`、`Remove-DevkitSatoriSaoriEntries`）。
-  - 里々は `＠SAORI` を `satori_conf.txt` からだけ読む（`satori_load_unload.cpp`。`＊初期化` を実行した直後に読み、その後 `words.clear()` してから辞書を読む）。組み込みの ssu の関数（`calc` など）は `load_default_entry` で登録されるので残る。
-  - 外した SAORI を呼ぶと `（名前） not found.` などになるので、`check-dic.ps1` はその名前で始まる報告（`（名前`、`（sync,名前` の後に `,`・`、`・`，`・`）`）を出さず、件数だけを表示する。SAORI の呼び出しそのものは確かめない。
-  - 文の中の `load_saori` で読み込む SAORI は防げない。
-  - `-Run` なしの読み込みチェックでは、今までどおり SAORI を読み込む（SAORI の `load` は呼ばれるが、関数は呼ばれない）。`＠SAORI` の書式の誤りや、読み込めない SAORI は、こちらで見つかる。
-- `tools/shiori.ps1` は SAORI を外さない（`-Eval` や `-Event` で、作者が SAORI を使う文を試せるようにするため）。
-
 ## 里々に備わっているもの（使わないもの）
 
 - `SatolistEcho`（さとりすと用）、`enable_log`（`Reference0` が 0 以外ならログを有効にする）。`＄Log`、`＄RequestLog`、`＄OperationLog`、`＄ResponseLog` で出す内容を変えられるが、キットは既定のまま読む。

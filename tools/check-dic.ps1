@@ -19,10 +19,7 @@
     copy and reads the log of that too: a call with arguments to a name that does not exist, a calculation that
     failed, a wrong number of arguments, an assignment line without a tab or equal sign, and so on. Names that were
     not found are warnings (a variable that was never set is reported the same way); jumps to missing sentences
-    are not reported, because dictionaries rely on them. -Run does not run SAORI: the SAORI list of satori_conf.txt
-    is removed in its temporary copy (the built-in ssu functions such as calc stay), and the messages about calls to
-    those SAORI are not shown; the calls themselves are not checked. A sentence that loads a SAORI by itself
-    (load_saori) would still run it. Random talks (sentences without a name) and sentences with a condition are not
+    are not reported, because dictionaries rely on them. Random talks (sentences without a name) and sentences with a condition are not
     run by -Run; try them with tools/shiori.ps1 -Event OnTalk.
 .EXAMPLE
     powershell -NoProfile -ExecutionPolicy Bypass -File tools/check-dic.ps1
@@ -93,8 +90,6 @@ if ($errors -eq 0 -and $result.ExitCode -ne 0) {
 
 # --- run the sentences ---------------------------------------------------------------------------------------
 $ran = 0
-$skippedSaori = @()
-$saoriSkipped = 0
 if ($Run -and $errors -eq 0) {
     $names = @(Get-DevkitSatoriTalkNames $GhostDir)
     # A request holds at most 3800 bytes of sentence names and the sentences are run in as many tamacs.exe runs
@@ -124,7 +119,7 @@ if ($Run -and $errors -eq 0) {
         for ($i = 0; $i -lt $chunk.Count; $i++) {
             $request.Add("Reference${i}: " + [char]0xFF08 + $chunk[$i] + [char]0xFF09)
         }
-        $echoRun = Invoke-DevkitTamacs -GhostDir $GhostDir -Arguments @('-r') -InputText ($request -join "`n") -EnableDebug -NoSaori -TimeoutSeconds $TimeoutSeconds
+        $echoRun = Invoke-DevkitTamacs -GhostDir $GhostDir -Arguments @('-r') -InputText ($request -join "`n") -EnableDebug -TimeoutSeconds $TimeoutSeconds
         if ($ShowLog) {
             Write-Host '---- SATORI log (run) ----'
             foreach ($line in ($echoRun.Log -split "`n")) { Write-Host (ConvertTo-DevkitGhostText $line $echoRun.Sandbox $GhostDir $base) }
@@ -142,24 +137,11 @@ if ($Run -and $errors -eq 0) {
         $ran += $chunk.Count
         # The load messages were reported above; only what happened while running is new.
         $runDiagnostics = @(Get-DevkitSatoriDiagnostics -Log $echoRun.Log -Sandbox $echoRun.Sandbox -GhostDir $GhostDir -Base $base | Where-Object { $_.Phase -ne 'load' })
-        # The SAORI were removed for the run, so calls to them are reported as missing names: (name), (name,args)
-        # or (sync,name,args), with a comma, ideographic comma or full-width comma.
-        $saoriNames = @($echoRun.SaoriNames | Where-Object { $_ })
-        if ($saoriNames.Count -gt 0) {
-            $separators = ',' + [char]0x3001 + [char]0xFF0C
-            $saoriPattern = '^' + [char]0xFF08 + '(?:sync[' + $separators + '])?(?:' + (($saoriNames | ForEach-Object { [regex]::Escape($_) }) -join '|') + ')[' + $separators + [char]0xFF09 + ']'
-            $saoriSkipped += @($runDiagnostics | Where-Object { $_.Message -match $saoriPattern }).Count
-            $runDiagnostics = @($runDiagnostics | Where-Object { $_.Message -notmatch $saoriPattern })
-            foreach ($name in $saoriNames) { if ($skippedSaori -notcontains $name) { $skippedSaori += $name } }
-        }
         $errors += Write-DevkitSatoriDiagnostics $runDiagnostics 'SATORI dictionary check' -Ci:$Ci
         $warnings += @($runDiagnostics | Where-Object { $_.Level -eq 'warning' }).Count
     }
 }
 
-if ($skippedSaori.Count -gt 0) {
-    Write-Host "check-dic: -Run did not run SAORI ($($skippedSaori -join ', ')); $saoriSkipped message(s) about calls to them were not shown"
-}
 $summary = "$loaded dictionaries" + $(if ($Run) { ", $ran sentences run" }) + ", errors: $errors, warnings: $warnings"
 if ($errors -gt 0 -or ($Strict -and $warnings -gt 0)) {
     Write-Host "check-dic: FAILED ($summary). Fix the problems above; a dictionary with an unclosed bracket is not read correctly."

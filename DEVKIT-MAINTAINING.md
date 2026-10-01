@@ -92,7 +92,7 @@ AI 開発キットそのもの（`AGENTS.md`、`CLAUDE.md`、`DEVKIT-GUIDE.md`�
 | `ssp.md` | SSTP（Owned SSTP）、SSP のログ、SSP の版の扱い、使っている機能（`GetStatus`、`Option: strict`、`dumpballoon`、`--dump-error-log`、`--offline-tool`）、試験用 SSP（`tools/run-ssp.ps1`） |
 | `dump-surface.md` | `tools/dump-surface.ps1` と `--offline-dump` の `--dump-surface-list`、`--dump-animation`、`--dump-bind` |
 | `image.md` | `tools/image.ps1` と `tools/lib/image.cs`、`tools/lib/image-engine.ps1`（コンパイルとキャッシュ、自前の PNG の読み書き、SSP の透過の扱い） |
-| `tamacs.md` | tamacs.exe（`tools/lib/tamacs.cs`）のビルドと `-r`、里々（`satori.dll`）を動かすときの一時コピー（`tools/lib/satori.ps1` の `New-DevkitSatoriSandbox`）、`-Run` で SAORI を外すこと、`ShioriEcho` と `tools/shiori.ps1` |
+| `tamacs.md` | tamacs.exe（`tools/lib/tamacs.cs`）のビルドと `-r`、里々（`satori.dll`）を動かすときの一時コピー（`tools/lib/satori.ps1` の `New-DevkitSatoriSandbox`）、`ShioriEcho` と `tools/shiori.ps1` |
 | `satori-check.md` | 里々のログの読み方（`tools/check-dic.ps1` と `tools/shiori.ps1`。`tools/satori.json` の `patterns`、誤検出を避ける扱い、パターンを足す手順） |
 | `update-satori.md` | `tools/update-satori.ps1` の `satori.zip`（ukatech/satoriya-shiori）の取得と置き換え、版の系統（Unicode 版 `Mc2XX` と ACP 版 `Mc1XX`）の選び方 |
 | `ignore.md` | `.narignore` / `.updateignore` の解釈（`tools/lib/ignore.ps1`） |

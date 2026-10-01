@@ -18,15 +18,14 @@
 - **`satori.dll`、`satorite.exe`**: 里々の配布物（https://github.com/ukatech/satoriya-shiori ）。`ghost/master/satori_license.txt` の条件。再配布・改変・ゴーストへの同梱は自由だが、**ライセンス文書を同梱すること**、改変しても**ライセンスを変えてはならない**こと、無保証であること。辞書・設定ファイル・SAORI・画像・`install.txt` などは、このライセンスの対象外。
 - **辞書とサンプルスクリプト**（`dic*.txt`、`another/`、`satori_conf.txt`、`replace*.txt`）: 原作者（櫛ヶ浜やぎ）が著作権を放棄している（`readme.txt`）。自由に改変・再配布してよい。
 - **シェルの画像**（`shell/master/`）: 辞書と同じく著作権放棄で、自由に改変・再配布してよい（リポジトリの所有者に確認済み）。原作者は櫛ヶ浜やぎ。
-- **`saori/fill_desktop.dll`**: 原作の里々に同梱されていた SAORI。`satori.dll` と同じく `satori_license.txt` の条件で扱う。
 - **`れしば.exe`**: 櫛ヶ浜やぎのログ受信ツール。`れしば.txt` に使い方はあるが、ライセンスの記載はない。
 
 ## 辞書の構成
 
-- `ghost/master/` の `dic*.txt` を、ファイル名の順（`dic01` → `dic10`）にすべて読む。新しい `dic11_*.txt` などを置いても自動で読み込まれる。サブフォルダ（`another/`）は、`＄辞書フォルダ` で指定したときだけ読まれる。
-- `satori_conf.txt` は、**`＊初期化` と `＠SAORI` の 2 つだけが有効**（それ以外を書いても読み捨てられる）。`＊初期化` の値はセーブデータより先に読まれるので、`satori_savedata.txt` に保存済みの変数（`＄喋り間隔` など）は上書きしない。
+- `ghost/master/` の `dic*.txt` を、ファイル名の順（`dic01` → `dic09`）にすべて読む。新しい `dic11_*.txt` などを置いても自動で読み込まれる。サブフォルダ（`another/`）は、`＄辞書フォルダ` で指定したときだけ読まれる。
+- `satori_conf.txt` は、**`＊初期化` と `＠SAORI` の 2 つだけが有効**（それ以外を書いても読み捨てられる）。いまは `＊初期化` だけを書いている。`＊初期化` の値はセーブデータより先に読まれるので、`satori_savedata.txt` に保存済みの変数（`＄喋り間隔` など）は上書きしない。
   - `＊初期化`: `＄喋り間隔 180秒`、`＄喋り間隔誤差 10%`、`＄会話時サーフェス戻し 有効`、`＄デフォルトサーフェス0 0`、`＄デフォルトサーフェス1 10`、`＄スコープ切り換え時 \n[half]`、`＄ユーザ名 ユーザ`、`＄自動挿入ウェイトの倍率 100%`。
-  - `＠SAORI`: `fill_desktop` `fill_red`（`saori/fill_desktop.dll`）を登録している。ssu の関数（`calc` `if` `substr` `split` `replace` `sprintf` など）は `satori.dll` に内蔵されているので、登録は要らない。SAORI を使わないなら、`＠SAORI` の部分と `saori/` フォルダを消してよい（`satori_conf.txt` の中のコメントにも書いてある）。
+  - SAORI は使っていない（`＠SAORI` も `saori/` フォルダも無い）。ssu の関数（`calc` `if` `substr` `split` `replace` `sprintf` など）は `satori.dll` に内蔵されているので、登録は要らない。
 - `replace.txt`: 読み込み時の置換。いまは `【タブ】` を、タブ 1 文字に置き換える（辞書の中でタブを書くための記号）。
 - `replace_after.txt`: 応答スクリプトを返す直前の置換。`さんさん`→`さん`、`ちゃんさん`→`ちゃん`、`くんさん`→`くん`（`＄ユーザ名` が敬称で終わっているときに「さん」が重ならないように）、`…` `‥` `・` の直後に `\w3` を足す。**`…` の後ろに `\w3` を手で書かない**（`……` と書けば、置換で自動的に間が入る）。
 - `characters.ini` と `satori_bootconf.txt` は無い。辞書は BOM なしの UTF-8 で、里々が全体を見て UTF-8 と判定している。UTF-8 と明示したいときは、`satori_bootconf.txt` に `is_utf8_all,true` と書く。
@@ -47,7 +46,6 @@
 | `dic07_Time.txt` | 時報（`＊１時` … `＊０時`。名前は全角数字）、記念日（`＊１１月３日`）、`＊OnMinuteChange` と `＊０分` `＊３０分`、タイマの例（`＊0Bustつつかれ`） |
 | `dic08_Labo.txt` | 里々の機能の実験室。メニューの「らぼ」（`＊らぼ`）から選ぶ。時報の変数、計算、条件分岐、マルチキャラクタ（`another/` への切り替え）、乱数、タイマ、変数名を変数で作る、`≫` での検索ジャンプ、FMO、`Sender` の比較など |
 | `dic09_ExEvent.txt` | 外部アプリのイベント（きのこ `OnKinokoObject*`、猫どりふ `OnNekodorifObject*`、バッテリー `OnBatteryLow`、`OnSysResource*`、`OnApplicationOperationFinish` など） |
-| `dic10_SAORI_test.txt` | SAORI の使い方サンプル。`p` キー（`＊pが押された`）で出る。`fill_desktop` と ssu（`if` `substr`）を使う |
 | `another/dic1.txt` | 別のキャラクター（さとりちゃん＝サーフェス 100、博士＝サーフェス 200）の辞書。`dic08` の `＊マルチキャラクタ` で `＄辞書フォルダ another` にすると読まれる。「はい」を選ぶと `＄辞書フォルダ .` で元に戻る |
 
 新しいイベントに反応させるときに書く場所:
@@ -178,10 +176,10 @@
 - [ ] ネットワーク更新の URL: `dic06_String.txt` の `＠homeurl`（いまは古い URL）。`updates2.dau` を用意する
 - [ ] ポータルサイト、おすすめサイト、意見の投稿先（`dic03_Menu.txt` の「ご意見やご要望など」の URL と `dic06_String.txt` の `＊sakura.portalsites` `＊sakura.recommendsites` `＊kero.recommendsites`）を、自分のものに。多くは既に無いサイト
 - [ ] `dic06_String.txt` のボタン名（`＠updatebutton.caption` `＠vanishbutton.caption` など）
-- [ ] 辞書に直接書かれたゴースト名・キャラクター名: `dic02_Event.txt` の `＊ポストと狛犬をインストール`（`OnInstallComplete` から `＞（Ｒ１）をインストール` で呼ばれる。自分のゴースト名に変える）、`dic03_Menu.txt` の「ポストと話したい」、`dic04_Change.txt` の `＊ポストへ変更` `＊ポストから変更`、`dic05_Communicate.txt` の `＊ユーザ「　ポスト` `＊ユーザ「　狛犬` `＊「　ポスト　狛犬`、`dic10_SAORI_test.txt` の「ポストに戻りますか？」
+- [ ] 辞書に直接書かれたゴースト名・キャラクター名: `dic02_Event.txt` の `＊ポストと狛犬をインストール`（`OnInstallComplete` から `＞（Ｒ１）をインストール` で呼ばれる。自分のゴースト名に変える）、`dic03_Menu.txt` の「ポストと話したい」、`dic04_Change.txt` の `＊ポストへ変更` `＊ポストから変更`、`dic05_Communicate.txt` の `＊ユーザ「　ポスト` `＊ユーザ「　狛犬` `＊「　ポスト　狛犬`
 - [ ] ポストと狛犬に固有の台詞（`dic01` の初回・起動・終了・ランダムトーク、`dic02` の消滅の場面、`dic03` のマウス反応、`dic07` の時報と記念日）。`dic07` の `＊１１月２１日`（作者の誕生日）も
 - [ ] 辞書の 1 行目のコメント（`dic1_Base.txt` など、ファイル名が古い）
-- [ ] 実験用の辞書を、使わないなら消す: `dic08_Labo.txt`（消すなら `dic03_Menu.txt` のメニューの「らぼ」も）、`dic10_SAORI_test.txt`（`p` キー）、`another/`、`dic09_ExEvent.txt`（古い外部アプリ用）。SAORI を使わないなら、`satori_conf.txt` の `＠SAORI`、`saori/` も。`dic02_Event.txt` の `＊rが押された` は、辞書を書くときに便利なので残してもよい
+- [ ] 実験用の辞書を、使わないなら消す: `dic08_Labo.txt`（消すなら `dic03_Menu.txt` のメニューの「らぼ」も）、`another/`、`dic09_ExEvent.txt`（古い外部アプリ用）。`dic02_Event.txt` の `＊rが押された` は、辞書を書くときに便利なので残してもよい
 - [ ] 同梱の `readme.txt` と `install.txt` を、自分のゴースト向けに書き直す（`readme.txt` は原作者の連絡先と配布元 URL のまま）
 - [ ] `satori_license.txt` は、`satori.dll` を同梱する限り、残す。`satorite.exe` `れしば.exe`（と説明文書）は、使わないなら消す
 - [ ] クレジットの例:「ポストと狛犬（櫛ヶ浜やぎ、https://github.com/ukatech/POST_and_KOMAINU ）をもとに作成」（URL は実際のものに直す）

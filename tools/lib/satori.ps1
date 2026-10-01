@@ -125,42 +125,13 @@ function Write-DevkitTextFileAuto([string]$Path, [string]$Text, [Text.Encoding]$
     [IO.File]::WriteAllBytes($Path, $out)
 }
 
-# Removes the entries of the SAORI word group (at sign + SAORI) from a satori_conf.txt, so that SATORI loads no SAORI.
-# SATORI reads that word group only from satori_conf.txt; its built-in ssu functions (calc and so on) stay.
-# Returns the names of the removed entries (the text before the first comma). Comment and blank lines are kept.
-function Remove-DevkitSatoriSaoriEntries([string]$ConfPath) {
-    if (-not (Test-Path -LiteralPath $ConfPath -PathType Leaf)) { return @() }
-    $file = Read-DevkitTextFileAuto $ConfPath
-    $newline = if ($file.Text.Contains("`r`n")) { "`r`n" } else { "`n" }
-    $at = [string][char]0xFF20
-    $heading = $at + 'SAORI'
-    $sentence = ([string](Get-DevkitSatoriData).initSentence).Substring(0, 1)
-    $comment = [string][char]0xFF03
-    $kept = New-Object System.Collections.Generic.List[string]
-    $names = New-Object System.Collections.Generic.List[string]
-    $inSaori = $false
-    foreach ($line in @($file.Text -split "\r?\n")) {
-        if ($line.StartsWith($at) -or $line.StartsWith($sentence)) {
-            $inSaori = ($line -split "`t")[0].TrimEnd() -eq $heading
-        } elseif ($inSaori -and $line.Trim() -ne '' -and -not $line.StartsWith($comment)) {
-            $names.Add($line.Split(',')[0].Trim())
-            continue
-        }
-        $kept.Add($line)
-    }
-    if ($names.Count -gt 0) { Write-DevkitTextFileAuto $ConfPath ($kept -join $newline) $file.Encoding }
-    return $names.ToArray()
-}
-
 # --- temporary copy of ghost/master ---------------------------------------------------------------------------------
 
-# Copies ghost/master to a temporary folder and returns the copy: [pscustomobject] Root (delete this), Dir (the copy),
-# SaoriNames (the SAORI that NoSaori removed).
+# Copies ghost/master to a temporary folder and returns the copy: [pscustomobject] Root (delete this), Dir (the copy).
 # EnableDebug adds the lines that switch the debug mode on (needed by ShioriEcho); Plain also turns off the automatic
-# waits and line breaks so that the script is easy to read. NoSaori removes the SAORI list from satori_conf.txt, so
-# that running the sentences cannot call a SAORI (fill_desktop and so on).
+# waits and line breaks so that the script is easy to read.
 function New-DevkitSatoriSandbox {
-    param([string]$GhostDir, [switch]$EnableDebug, [switch]$Plain, [switch]$NoSaori)
+    param([string]$GhostDir, [switch]$EnableDebug, [switch]$Plain)
     $root = Join-Path ([IO.Path]::GetTempPath()) ('devkit-satori-' + [guid]::NewGuid().ToString('N'))
     $dir = Join-Path $root (Split-Path $GhostDir -Leaf)
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
@@ -174,13 +145,11 @@ function New-DevkitSatoriSandbox {
         if ($EnableDebug) { $lines += @($data.debugLines) }
         if ($Plain) { $lines += @($data.plainLines) }
         if ($lines.Count -gt 0) { Add-DevkitSatoriInitLines (Join-Path $dir 'satori_conf.txt') $lines }
-        $saoriNames = @()
-        if ($NoSaori) { $saoriNames = @(Remove-DevkitSatoriSaoriEntries (Join-Path $dir 'satori_conf.txt')) }
     } catch {
         Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
         throw
     }
-    return [pscustomobject]@{ Root = $root; Dir = $dir; SaoriNames = $saoriNames }
+    return [pscustomobject]@{ Root = $root; Dir = $dir }
 }
 
 # --- tamacs.exe -----------------------------------------------------------------------------------------------------
@@ -189,10 +158,8 @@ function New-DevkitSatoriSandbox {
 # Call Get-DevkitTamacs first to tell the user when it is not available.
 # tamacs.exe takes the full path of the dll. Without -r in $Arguments it only loads and unloads SATORI; with -r it
 # also sends the request in $InputText and prints the response. Exit code 3: satori.dll has no Set_loghandler.
-# NoSaori runs it without SAORI (see New-DevkitSatoriSandbox).
 # Returns ExitCode, TimedOut, Response (the SHIORI response with -r), Log (everything SATORI logged; [ERROR] lines
-# that tamacs.exe adds are included), Sandbox (the path that appears in the log instead of $GhostDir), and SaoriNames
-# (the SAORI that NoSaori removed).
+# that tamacs.exe adds are included), and Sandbox (the path that appears in the log instead of $GhostDir).
 function Invoke-DevkitTamacs {
     param(
         [string]$GhostDir,
@@ -200,12 +167,11 @@ function Invoke-DevkitTamacs {
         [string]$InputText,
         [switch]$EnableDebug,
         [switch]$Plain,
-        [switch]$NoSaori,
         [int]$TimeoutSeconds = 120
     )
     $tamacs = Get-DevkitTamacs
     if (-not $tamacs.Path) { throw $tamacs.Error }
-    $sandbox = New-DevkitSatoriSandbox -GhostDir $GhostDir -EnableDebug:$EnableDebug -Plain:$Plain -NoSaori:$NoSaori
+    $sandbox = New-DevkitSatoriSandbox -GhostDir $GhostDir -EnableDebug:$EnableDebug -Plain:$Plain
     try {
         $processArgs = @{
             FilePath         = $tamacs.Path
@@ -233,9 +199,8 @@ function Invoke-DevkitTamacs {
         ExitCode = $result.ExitCode
         TimedOut = $result.TimedOut
         Response = $response
-        Log        = ($log -replace "\r\n", "`n")
-        Sandbox    = $sandbox.Dir
-        SaoriNames = $sandbox.SaoriNames
+        Log      = ($log -replace "\r\n", "`n")
+        Sandbox  = $sandbox.Dir
     }
 }
 
