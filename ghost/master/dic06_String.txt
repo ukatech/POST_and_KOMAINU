@@ -38,7 +38,7 @@ shiori互換dll『里々（さとり）』用辞書
 ＃　ゴーストのルート（install.txt があるところ）に、tools/build-nar.ps1 で作った
 ＃　updates2.dau と updates.txt を置いておく。
 ＃＠homeurl
-＃https://raw.githubusercontent.com/ukatech/POST_and_KOMAINU/main/
+＃https://raw.githubusercontent.com/ukatech/POST_and_KOMAINU_V2/main/
 
 ＠どら映画
 の恐竜
@@ -98,7 +98,7 @@ https://github.com/ukatech/satoriya-shiori
 
 ＊sakura.portalsites
 ポストと狛犬
-https://github.com/ukatech/POST_and_KOMAINU
+https://github.com/ukatech/POST_and_KOMAINU_V2
 
 ：私たちのおうち。
 ：管理人は……いまはリポジトリ、だな。

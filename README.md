@@ -23,7 +23,7 @@ https://github.com/ukatech/POST_and_KOMAINU
 
 ## 手で編集する
 
-- 辞書の本体は `ghost/master/` にある `dic*.txt`（`dic01_Base.txt` から `dic09_ExEvent.txt`）です。文字コードは UTF-8（BOM なし）です。里々は、`dic` で始まり `.txt` で終わるファイルをすべて読み込むので、`dic11_*.txt` のようにファイルを足すだけで増やせます。
+- 辞書の本体は `ghost/master/` にある `dic*.txt`（`dic01_Base.txt` から `dic09_Timer.txt`）です。文字コードは UTF-8（BOM なし）です。里々は、`dic` で始まり `.txt` で終わるファイルをすべて読み込むので、`dic10_*.txt` のようにファイルを足すだけで増やせます。
 - どのファイルに何が書いてあるか（ランダムトーク、起動・終了、マウスへの反応、メニューなど）、キャラクターと使えるサーフェス番号、トークの書き方の決まりは、[GHOST.md](GHOST.md) にまとめてあります。
 - 里々の文法の要点とトークでよくある失敗は、[AGENTS.md](AGENTS.md) の「里々辞書の書き方の要点」と「トーク（さくらスクリプト）の書き方」にあります。AI エージェント向けの指示書ですが、人が読んでもわかるように書いてあります。
 - 詳しい仕様は、次を見てください。
@@ -43,7 +43,7 @@ https://github.com/ukatech/POST_and_KOMAINU
 ## AI エージェントで開発する (Vibe Coding)
 
 このゴーストには、AI コーディングエージェント（Claude Code、Codex、GitHub Copilot など）で開発するための開発キット「里々バイブコーディングツールキット」が入っています。
-リポジトリを clone したフォルダでも、nar を SSP にインストールしたフォルダ（`<SSP>/ghost/POST_and_KOMAINU/`）でも使えます。
+リポジトリを clone したフォルダでも、nar を SSP にインストールしたフォルダ（`<SSP>/ghost/POST_and_KOMAINU_V2/`）でも使えます。
 
 開発キットは、Windows と Claude Code の組み合わせで作り、動作を確かめています。おすすめもこの組み合わせです。
 
@@ -60,7 +60,7 @@ https://github.com/ukatech/POST_and_KOMAINU
 
 # ライセンス
 
-- サンプルスクリプト（辞書 `dic*.txt`、`another/`、`satori_conf.txt`、`replace*.txt`）とシェル: 櫛ヶ浜やぎ氏が著作権を放棄しています（[readme.txt](readme.txt)）。ご自由にお使いください。
+- サンプルスクリプト（辞書 `dic*.txt`、`satori_conf.txt`、`replace*.txt`）とシェル: 櫛ヶ浜やぎ氏が著作権を放棄しています（[readme.txt](readme.txt)）。ご自由にお使いください。
 - `ghost/master/satori.dll`、`satorite.exe`: 里々の配布物です。`ghost/master/satori_license.txt` の条件（再配布・改変は自由、ただしライセンス文書を同梱すること、ライセンスを変えないこと、無保証）に従います。辞書、設定ファイル、SAORI、画像などは、このライセンスの対象外です。
 - 開発キット（`tools/`、`docs/agents/`、`.claude/` など）: YAYA のテンプレートゴースト「紺野ややめ」（Public Domain / Unlicense）の開発キットを、里々向けに移植したものです。キットも同じく Public Domain（Unlicense）です。
 

@@ -19,7 +19,7 @@ shiori互換dll『里々（さとり）』用辞書
 ：（Ｒ１）/（Ｒ０）をインストールしました。
 ：ふむ。
 
-＊ポストと狛犬をインストール
+＊ポストと狛犬V2をインストール
 ：（Ｒ１）/（Ｒ０）をインストールしました。
 
 ……って私だ。
@@ -487,7 +487,7 @@ shiori互換dll『里々（さとり）』用辞書
 
 ＃ OnUserInputCancel対策
 ＃ https://ssp.shillest.net/ukadoc/manual/list_shiori_event.html
-＃ サンプルとしてユーザ名を空打ちされたへ飛ばしてます。
+＃ ＊OnUserInput と同じく、「（Ｒ０）を空打ちされた」へ飛ばします。
 
 ＊OnUserInputCancel
 ＞（Ｒ０）を空打ちされた	（compare,（Ｒ１）,close）

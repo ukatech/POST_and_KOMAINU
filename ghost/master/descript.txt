@@ -1,10 +1,10 @@
 charset,UTF-8
 
-craftman,Yagi Kushigahama
-craftmanw,櫛ヶ浜やぎ
-craftmanurl,https://github.com/ukatech/POST_and_KOMAINU
+craftman,Seibihan/Yagi Kushigahama
+craftmanw,整備班/櫛ヶ浜やぎ
+craftmanurl,https://github.com/ukatech/POST_and_KOMAINU_V2
 
-name,ポストと狛犬
+name,ポストと狛犬V2
 type,ghost
 
 sakura.name,ポスト

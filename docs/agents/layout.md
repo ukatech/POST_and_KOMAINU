@@ -8,8 +8,7 @@
 | `readme.txt` | 原作者（櫛ヶ浜やぎ）の readme。元の文面のまま残す（配布物に入る） |
 | `ghost/master/descript.txt` | ゴーストの基本情報（名前、作者、`shiori,satori.dll`、`charset,UTF-8`） |
 | `ghost/master/satori_conf.txt` | 里々の初期設定。**`＊初期化`（システム変数の初期値）と `＠SAORI`（SAORI の登録）だけが有効** |
-| `ghost/master/dic*.txt` | **ゴーストの辞書本体。主に編集するのはここ**。`dic` で始まり `.txt` で終わるファイルがファイル名の順にすべて読まれる（`dic01_Base.txt` … `dic09_ExEvent.txt`。新しい `dic11_*.txt` も自動で読まれる） |
-| `ghost/master/another/` | 別のキャラクターの辞書。`＄辞書フォルダ` で指定したときだけ読まれる |
+| `ghost/master/dic*.txt` | **ゴーストの辞書本体。主に編集するのはここ**。`dic` で始まり `.txt` で終わるファイルがファイル名の順にすべて読まれる（`dic01_Base.txt` … `dic09_Timer.txt`。新しい `dic10_*.txt` も自動で読まれる） |
 | `ghost/master/replace.txt` / `replace_after.txt` | 辞書の読み込み時の置換 / 応答を返す直前の置換（`置換前<タブ>置換後`） |
 | `ghost/master/satori.dll` | SHIORI 本体（Unicode 版で、ssu を内蔵している）。`tools/update-satori.ps1` 以外で差し替えない。旧版のゴーストには `saori/ssu.dll` が残っていることもある（`docs/agents/workflows/update-satori.md`） |
 | `ghost/master/satori_license.txt` | `satori.dll` のライセンス。`satori.dll` を同梱する限り残す |

@@ -5,27 +5,27 @@
 
 ## このゴーストについて
 
-- 伺か（ukagaka）のゴースト「ポストと狛犬」（`ghost/master/descript.txt` の `name`）。SHIORI「里々（SATORI）」の**サンプルゴースト**で、里々の辞書の書き方を、動くゴーストとして見せるためのもの。「里々バイブコーディングツールキット」として、これを土台に自分のゴーストを作ってもらう。
+- 伺か（ukagaka）のゴースト「ポストと狛犬V2」（`ghost/master/descript.txt` の `name`）。SHIORI「里々（SATORI）」の**サンプルゴースト**で、里々の辞書の書き方を、動くゴーストとして見せるためのもの。「里々バイブコーディングツールキット」として、これを土台に自分のゴーストを作ってもらう。
 - キャラクター: `sakura.name` は「ポスト」、`kero.name` は「狛犬」。
-- 原作者: 櫛ヶ浜やぎ（Yagi Kushigahama、里々の作者）。里々に同梱されていたサンプルゴーストを、ponapalt と協力者がいまの環境向けに作り直している。
+- 原作者: 櫛ヶ浜やぎ（Yagi Kushigahama、里々の作者）。ゴーストの作者表記（`craftmanw`）は「整備班/櫛ヶ浜やぎ」。里々に同梱されていたサンプルゴーストを、ponapalt と協力者がいまの環境向けに作り直している。
 - SHIORI: `satori.dll`（Unicode 版、内部のバージョン表記は Mc201-11）。文字コードは UTF-8（`descript.txt` の `charset,UTF-8`）。辞書・設定・置換ファイルはすべて UTF-8（BOM なし）、改行は LF。
 - 里々の仕様書: https://github.com/ukatech/satori-docs （`grammar/` 文法、`shiori/` イベントと動作、`functions/` `（）` 内蔵関数、`system/` システム変数、`ssu/` ssu の関数）。里々の構文は推測で書かず、ここで確かめる。
-- `install.txt` は `directory,POST_and_KOMAINU`（インストール先）、`refresh,1`、`refreshundeletemask,satori_savedata.txt`（再インストールでもセーブデータを消さない）。
-- ネットワーク更新の URL は `dic06_String.txt` の `＠homeurl`（`descript.txt` には `homeurl` を書いていない）。いまはコメントアウトしてあり、値は `https://raw.githubusercontent.com/ukatech/POST_and_KOMAINU/main/`（`updates2.dau` を置く場所）。使うときはコメントを外す。
-- ポータルサイト（`＊sakura.portalsites`）は SSP、UKADOC、satori-docs、satoriya-shiori、このリポジトリだけ。おすすめサイトは、昔のものが無くなったので置いていない。ご意見の投稿先は、このリポジトリの Issues。
+- `install.txt` は `directory,POST_and_KOMAINU_V2`（インストール先）、`refresh,1`、`refreshundeletemask,satori_savedata.txt`（再インストールでもセーブデータを消さない）。
+- ネットワーク更新の URL は `dic06_String.txt` の `＠homeurl`（`descript.txt` には `homeurl` を書いていない）。いまはコメントアウトしてあり、値は `https://raw.githubusercontent.com/ukatech/POST_and_KOMAINU_V2/main/`（`updates2.dau` を置く場所）。使うときはコメントを外す。
+- ポータルサイト（`＊sakura.portalsites`）は SSP、UKADOC、satori-docs、satoriya-shiori、このリポジトリだけ。おすすめサイトは、昔のものが無くなったので置いていない。メニューに意見の投稿先は置いていない。
 
 ## ライセンス
 
 - **`satori.dll`、`satorite.exe`**: 里々の配布物（https://github.com/ukatech/satoriya-shiori ）。`ghost/master/satori_license.txt` の条件。再配布・改変・ゴーストへの同梱は自由だが、**ライセンス文書を同梱すること**、改変しても**ライセンスを変えてはならない**こと、無保証であること。辞書・設定ファイル・SAORI・画像・`install.txt` などは、このライセンスの対象外。
-- **辞書とサンプルスクリプト**（`dic*.txt`、`another/`、`satori_conf.txt`、`replace*.txt`）: 原作者（櫛ヶ浜やぎ）が著作権を放棄している（`readme.txt`）。自由に改変・再配布してよい。
+- **辞書とサンプルスクリプト**（`dic*.txt`、`satori_conf.txt`、`replace*.txt`）: 原作者（櫛ヶ浜やぎ）が著作権を放棄している（`readme.txt`）。自由に改変・再配布してよい。
 - **シェルの画像**（`shell/master/`）: 辞書と同じく著作権放棄で、自由に改変・再配布してよい（リポジトリの所有者に確認済み）。原作者は櫛ヶ浜やぎ。
 - **`receiver.bat` `receiver.ps1` `receiver.txt`**: ログ受信ウインドウ（旧版の `れしば.exe` の代わり）。開発キットと同じく Public Domain（Unlicense）。
 
 ## 辞書の構成
 
-- `ghost/master/` の `dic*.txt` を、ファイル名の順（`dic00` → `dic11`）にすべて読む。新しい `dic12_*.txt` などを置いても自動で読み込まれる。サブフォルダ（`another/`）は、`＄辞書フォルダ` で指定したときだけ読まれる。
+- `ghost/master/` の `dic*.txt` を、ファイル名の順（`dic00` → `dic09`）にすべて読む。新しい `dic10_*.txt` などを置いても自動で読み込まれる。サブフォルダは、`＄辞書フォルダ` で指定したときだけ読まれる（いまは無い）。
 - `satori_conf.txt` は、**`＊初期化` と `＠SAORI` の 2 つだけが有効**（それ以外を書いても読み捨てられる）。いまは `＊初期化` だけを書いている。`＊初期化` の値はセーブデータより先に読まれるので、`satori_savedata.txt` に保存済みの変数（`＄喋り間隔` など）は上書きしない。
-  - `＊初期化`: `＄喋り間隔 180秒`、`＄喋り間隔誤差 10%`、`＄会話時サーフェス戻し 有効`、`＄デフォルトサーフェス0 0`、`＄デフォルトサーフェス1 10`、`＄スコープ切り換え時 \n[half]`、`＄ユーザ名 ユーザ`、`＄自動挿入ウェイトの倍率 100%`、`＄なでられ持続秒数 2`、`＄なでられ反応回数 60`、`＄トーク中のなでられ反応 無効`、`＄自動アンカー 有効`、キッチンタイマーの `＄キッチンタイマー１の分数 ０`〜`５`（`dic11_Timer.txt`）。
+  - `＊初期化`: `＄喋り間隔 180秒`、`＄喋り間隔誤差 10%`、`＄会話時サーフェス戻し 有効`、`＄デフォルトサーフェス0 0`、`＄デフォルトサーフェス1 10`、`＄スコープ切り換え時 \n[half]`、`＄ユーザ名 ユーザ`、`＄自動挿入ウェイトの倍率 100%`、`＄なでられ持続秒数 2`、`＄なでられ反応回数 60`、`＄トーク中のなでられ反応 無効`、`＄自動アンカー 有効`、キッチンタイマーの `＄キッチンタイマー１の分数 ０`〜`５`（`dic09_Timer.txt`）。
   - SAORI は使っていない（`＠SAORI` も `saori/` フォルダも無い）。ssu の関数（`calc` `if` `substr` `split` `replace` `sprintf` など）は `satori.dll` に内蔵されているので、登録は要らない。
 - `replace.txt`: 読み込み時の置換。いまは `【タブ】` を、タブ 1 文字に置き換える（辞書の中でタブを書くための記号）。
 - `replace_after.txt`: 応答スクリプトを返す直前の置換。`さんさん`→`さん`、`ちゃんさん`→`ちゃん`、`くんさん`→`くん`（`＄ユーザ名` が敬称で終わっているときに「さん」が重ならないように）、`…` `‥` `・` の直後に `\w3` を足す。**`…` の後ろに `\w3` を手で書かない**（`……` と書けば、置換で自動的に間が入る）。
@@ -38,19 +38,16 @@
 
 | ファイル（`ghost/master/`） | 主な中身 |
 |---|---|
-| `dic00_System.txt` | `＊OnSatoriLoad`（`＄NOTIFYの自動保存`、文・単語群の重複回避の設定）と、危険なさくらスクリプトを無効にする `＠KillDangerousTag`（`＠DangerousTag` の一覧）。ユーザーの入力を台詞に出すときは `（call（バイト値、１）KillDangerousTag（バイト値、１）（…））` を通す（`＊ユーザ名を教えてもらった`、`＊OnInstallRefuse`）。`＄デバッグ 無効` は書かない（`tools/shiori.ps1 -Eval` のデバッグモードを打ち消すため） |
+| `dic00_System.txt` | `＊OnSatoriLoad`（`＄NOTIFYの自動保存`、文・単語群の重複回避の設定）と、危険なさくらスクリプトを無効にする `＠KillDangerousTag`（`＠DangerousTag` の一覧）。ユーザーの入力を台詞に出すときは `（call（バイト値、１）KillDangerousTag（バイト値、１）（…））` を通す（`＊OnInstallRefuse`）。`＄デバッグ 無効` は書かない（`tools/shiori.ps1 -Eval` のデバッグモードを打ち消すため） |
 | `dic01_Base.txt` | 初回起動（`＊初回`、`＊初回二回目以降`）、起動（`＊起動`。時間帯で `＊朝に起動` などへ分岐）、終了（`＊終了`）、**ランダムトーク**（名前のない `＊`）。選択肢を出すトーク（`＊` から始まり `＿たこ` などの選択肢を持つクイズ）もここ。`＠` で始まる単語群（`＠季節の食べ物` など）の例 |
 | `dic02_Event.txt` | 本体からのイベント。インストール（`OnInstall*`）、シェル変更（`OnShellChanging` `OnShellChanged`）、ネットワーク更新（`OnUpdate*`）、時計合わせ（`OnSNTP*`）、ヘッドライン（`OnHeadlinesense*`）、メールチェック（`OnBIFF*`）、選択肢（`OnChoiceSelect` `OnChoiceTimeout`。引数付きの選択肢 `＿ラベル<タブ>ID<タブ>引数` は `OnChoiceSelectEx` が ID の文を `（call）` で呼び、引数を `（Ａ０）`〜にする。`＊OnChoiceSelect` があると里々は引数を渡さないため）、消滅（`OnVanish*`）、キー入力（`OnKeyPress`）、URL ドロップ（`OnURLDropping` `OnURLDropped`）、`OnUserInput` など。また `OnFirstBoot` `OnBoot` `OnClose` `OnGhostChanged` `OnGhostChanging` から、`＊初回` `＊起動` `＊終了` などへジャンプさせている |
-| `dic03_Menu.txt` | マウス反応（`＊0Headなでられ`、`＊0LeftEyeつつかれ`、`＊0ころころ` など）と、**メインメニュー**（`＊0Faceつつかれ`、顔をつつく）。喋り頻度の変更、ランダムトークの追加分もここ |
+| `dic03_Menu.txt` | マウス反応（`＊0Headなでられ`、`＊0ころころ` など）と、**メインメニュー**（`＊0つつかれ`。ポストのどこをつついても、当たり判定の名前に関わらずここに来る。`＊OnMouseDoubleClick` が `＞（Ｒ３）つつかれ` で落とす）。喋り頻度の変更、ユーザ名を覚えてもらう `＊名前を覚えてもらう`（入力は `dic02` の `＊OnUserInput` から `＊ユーザ名を教えてもらった` `＊ユーザ名を空打ちされた` `＊ユーザ名をタイムアウト` に来る。空白だけ・17 文字以上は受け付けず、元の名前に戻す）、ランダムトークの追加分もここ |
 | `dic04_Change.txt` | ゴーストの切り替えのときのトーク（`＊<相手のsakura.name>へ変更`、`＊<相手のsakura.name>から変更`、`＊他のゴーストへ変更` `＊他のゴーストから変更`）。相手のゴーストごとに、名前で書き分けている |
 | `dic05_Communicate.txt` | コミュニケート。メニューの「隣のゴーストにでんぱを送る」（`＊隣のゴーストにでんぱを送る`）、他のゴーストとの会話（`＊なるに話しかける` など）、ユーザーの入力への返事（`＊ユーザ「　元気`）、`＊COMMUNICATE該当なし` |
 | `dic06_String.txt` | 文字列のリソース。メニューのボタン名（`＠portalrootbutton.caption` `＠updatebutton.caption` など）、`＠homeurl`、`＠username`、ポータルサイトとおすすめサイトの一覧（`＊sakura.portalsites` `＊sakura.recommendsites` `＊kero.recommendsites`） |
 | `dic07_Time.txt` | 時報（`＊１時` … `＊０時`。名前は全角数字）、記念日（`＊１１月３日`）、`＊OnMinuteChange` と `＊０分` `＊３０分`、タイマの例（`＊0Bustつつかれ`） |
-| `dic08_Labo.txt` | 里々の機能の実験室。メニューの「らぼ」（`＊らぼ`）から選ぶ。時報の変数、計算、条件分岐、マルチキャラクタ（`another/` への切り替え）、乱数、タイマ、変数名を変数で作る、`≫` での検索ジャンプ、FMO、`Sender` の比較など |
-| `dic10_Test.txt` | ssu の関数（`if` `iflist` `switch` `choice` `split` `substr` `nop`）の使い方サンプル。メニューの「SAORIてすと」から選ぶ |
-| `dic11_Timer.txt` | キッチンタイマー。メニューの「キッチンタイマー」（`＊キッチンタイマー`）から。里々のタイマ変数だけで作っていて、5 つの枠（`＄キッチンタイマー１タイマ`〜`５`、`＄キッチンタイマー１の分数`〜`５`。分数の初期値 `０` は `satori_conf.txt`）を同時に動かせる。動いているタイマーの一覧（`＊動いているキッチンタイマー`、`（loop）` で単語群を呼ぶ）から止められる。分数の選択肢と止める選択肢は、引数付きの選択肢（`（Ａ０）` が分数や番号）。`＊キッチンタイマーＮ` の文は無く、鳴ると `＊OnSatoriTimer`（名前が「キッチンタイマー」で始まるときだけの条件付き。`（Ａ１）` が遅れた秒数）。終了時（`＊OnSatoriClose`）にすべて取り消す。時間の入力は `＊OnUserInput`（ID `キッチンタイマーの入力`）を通る |
-| `dic09_ExEvent.txt` | 外部アプリのイベント（きのこ `OnKinokoObject*`、猫どりふ `OnNekodorifObject*`、バッテリー `OnBatteryLow`、`OnSysResource*`、`OnApplicationOperationFinish` など） |
-| `another/dic1.txt` | 別のキャラクター（さとりちゃん＝サーフェス 100、博士＝サーフェス 200）の辞書。`dic08` の `＊マルチキャラクタ` で `＄辞書フォルダ another` にすると読まれる。「はい」を選ぶと `＄辞書フォルダ .` で元に戻る |
+| `dic08_ExEvent.txt` | 外部アプリのイベント（きのこ `OnKinokoObject*`、猫どりふ `OnNekodorifObject*`、バッテリー `OnBatteryLow`、`OnSysResource*`、`OnApplicationOperationFinish` など） |
+| `dic09_Timer.txt` | キッチンタイマー。メニューの「キッチンタイマー」（`＊キッチンタイマー`）から。里々のタイマ変数だけで作っていて、5 つの枠（`＄キッチンタイマー１タイマ`〜`５`、`＄キッチンタイマー１の分数`〜`５`。分数の初期値 `０` は `satori_conf.txt`）を同時に動かせる。動いているタイマーの一覧（`＊動いているキッチンタイマー`、`（loop）` で単語群を呼ぶ）から止められる。分数の選択肢と止める選択肢は、引数付きの選択肢（`（Ａ０）` が分数や番号）。`＊キッチンタイマーＮ` の文は無く、鳴ると `＊OnSatoriTimer`（名前が「キッチンタイマー」で始まるときだけの条件付き。`（Ａ１）` が遅れた秒数）。終了時（`＊OnSatoriClose`）にすべて取り消す。時間の入力は `＊OnUserInput`（ID `キッチンタイマーの入力`）を通る |
 
 新しいイベントに反応させるときに書く場所:
 
@@ -59,7 +56,7 @@
 - マウス反応は、`＊<スコープ番号><当たり判定名>つつかれ` / `なでられ` / `ころころ` と書く（例: `＊0Headなでられ`、`＊1つつかれ`）。里々が自動で呼ぶ。
 - 時報は `＊<時>時`、日付は `＊<月>月<日>日`（どちらも全角数字）を `dic07_Time.txt` に。
 - ゴーストの切り替え時のトークは `dic04_Change.txt` に、相手の `sakura.name` を使って `＊<名前>へ変更` / `＊<名前>から変更`。
-- メニューの項目を足すときは、`dic03_Menu.txt` の `＊0Faceつつかれ` に `＿項目名` を足し、同じ名前の `＊項目名` を書く。
+- メニューの項目を足すときは、`dic03_Menu.txt` の `＊0つつかれ` に `＿項目名` を足し、同じ名前の `＊項目名` を書く。
 - 同名の文を複数書くと、その中から 1 つが選ばれる（ランダムトークも、同じ名前の文をたくさん書いておく形）。1 つの文には、1 回のトークに含めたい会話をすべて書く。
 - 辞書を書き換えたら、ゴーストの起動中に `r` キー（`＊rが押された`）で、辞書を再読み込みできる（`＄辞書リロード 実行`）。デバッグは `satori-docs` の `shiori/debug.md`（ShioriEcho）、エラーは `other/error-messages.md` を見る。
 
@@ -86,7 +83,6 @@
 
 - ポストが「俺」と言う、狛犬が丁寧語で話す、のように口調を混ぜない。
 - 二人ともメタ発言が多い（「無機物」「作者」「辞書」「サンプル」）。「ポストと狛犬が里々の紹介をする」という立場は保つ。
-- `another/dic1.txt` の 2 人（さとりちゃん＝丁寧語の女の子、博士＝「〜じゃ」のおじいさん）は別のキャラクターで、`dic08` の実験用。
 
 ### サーフェス（`shell/master/`）
 
@@ -101,11 +97,9 @@
 | 4 | ポスト | 半目で口を結ぶ（不満・しょんぼり） | 「うー」「えー」 |
 | 5 | ポスト | 目が点で口が笑う（にこにこ） | 「にこにこ」「……ふ」 |
 | 6 | ポスト | 目を細めて口を大きく開ける（放心・脱力） | 「あーぅー」「……まぁね」 |
-| 21〜23 | ポスト | 少しずつ低くなり、地面に沈んでいくポスト（21 が最も高く、23 が最も低い） | `dic08` の `＊ちんぼつ` だけ |
+| 21〜23 | ポスト | 少しずつ低くなり、地面に沈んでいくポスト（21 が最も高く、23 が最も低い） | 使っていない |
 | 10 | 狛犬 | 灰色の狛犬の落書き（標準） | 普通に話すとき |
 | 11 | 狛犬 | 目を見開いた狛犬（刮目・驚き） | 「がお」「はぅぁっ……！」 |
-| 100 | さとりちゃん（`another/`） | 青紫の髪の女の子 | `dic08` のマルチキャラクタの実験（`＄サーフェス加算値0 100`） |
-| 200 | 博士（`another/`） | 帽子をかぶったおじいさん | 同上（`＄サーフェス加算値1 200`） |
 
 - 当たり判定（`surfaces.txt` の `collision`）: サーフェス 0〜6 に `Head`、`LeftEye`、`RightEye`、`Face`。狛犬（10、11）には当たり判定がない（`＊1つつかれ` の名前は、当たり判定名なしの `1つつかれ`）。`Bust` は定義されていない（`dic07_Time.txt` の `＊0Bustつつかれ` は、タイマの例のためだけにあって、動かない）。
 - `surface100` と `surface200` は、バルーンの位置のオフセット（`sakura.balloon.offsetx` など）だけを書いている。
@@ -174,16 +168,16 @@
 
 ## テンプレートから独立させるときの追加項目
 
-- [ ] `install.txt`: `name`（ゴースト名）、`directory`（`POST_and_KOMAINU`）、`refresh` `refreshundeletemask`（`satori_savedata.txt` は残す）
+- [ ] `install.txt`: `name`（ゴースト名）、`directory`（`POST_and_KOMAINU_V2`）、`refresh` `refreshundeletemask`（`satori_savedata.txt` は残す）
 - [ ] `ghost/master/descript.txt`: `name`、`sakura.name`、`kero.name`、`craftman` / `craftmanw` / `craftmanurl`（自分の情報に）、`icon`（`post.ico`）。`id`、`homeurl`（ネットワーク更新をするとき）を足す
 - [ ] `shell/master/descript.txt`: `name`、`craftman*`（シェルを作り替えるとき）
 - [ ] ネットワーク更新の URL: `dic06_String.txt` の `＠homeurl`（いまは古い URL）。`updates2.dau` を用意する
-- [ ] ポータルサイト、おすすめサイト、意見の投稿先（`dic03_Menu.txt` の「ご意見やご要望など」の URL と `dic06_String.txt` の `＊sakura.portalsites` `＊sakura.recommendsites` `＊kero.recommendsites`）を、自分のものに。多くは既に無いサイト
+- [ ] ポータルサイトとおすすめサイト（`dic06_String.txt` の `＊sakura.portalsites` `＊sakura.recommendsites` `＊kero.recommendsites`）を、自分のものに。多くは既に無いサイト
 - [ ] `dic06_String.txt` のボタン名（`＠updatebutton.caption` `＠vanishbutton.caption` など）
-- [ ] 辞書に直接書かれたゴースト名・キャラクター名: `dic02_Event.txt` の `＊ポストと狛犬をインストール`（`OnInstallComplete` から `＞（Ｒ１）をインストール` で呼ばれる。自分のゴースト名に変える）、`dic03_Menu.txt` の「ポストと話したい」、`dic04_Change.txt` の `＊ポストへ変更` `＊ポストから変更`、`dic05_Communicate.txt` の `＊ユーザ「　ポスト` `＊ユーザ「　狛犬` `＊「　ポスト　狛犬`
+- [ ] 辞書に直接書かれたゴースト名・キャラクター名: `dic02_Event.txt` の `＊ポストと狛犬V2をインストール`（`OnInstallComplete` から `＞（Ｒ１）をインストール` で呼ばれる。自分のゴースト名に変える）、`dic03_Menu.txt` の「ポストと話したい」、`dic04_Change.txt` の `＊ポストへ変更` `＊ポストから変更`、`dic05_Communicate.txt` の `＊ユーザ「　ポスト` `＊ユーザ「　狛犬` `＊「　ポスト　狛犬`
 - [ ] ポストと狛犬に固有の台詞（`dic01` の初回・起動・終了・ランダムトーク、`dic02` の消滅の場面、`dic03` のマウス反応、`dic07` の時報と記念日）。`dic07` の `＊１１月２１日`（作者の誕生日）も
 - [ ] 辞書の 1 行目のコメント（`dic1_Base.txt` など、ファイル名が古い）
-- [ ] 実験用の辞書を、使わないなら消す: `dic08_Labo.txt`（消すなら `dic03_Menu.txt` のメニューの「らぼ」も）、`another/`、`dic09_ExEvent.txt`（古い外部アプリ用）、`dic11_Timer.txt`（キッチンタイマー。消すなら `dic03_Menu.txt` のメニューの「キッチンタイマー」と、`satori_conf.txt` の `＄キッチンタイマーＮの分数` も）。`dic02_Event.txt` の `＊rが押された` は、辞書を書くときに便利なので残してもよい
+- [ ] 実験用の辞書を、使わないなら消す: `dic08_ExEvent.txt`（古い外部アプリ用）、`dic09_Timer.txt`（キッチンタイマー。消すなら `dic03_Menu.txt` のメニューの「キッチンタイマー」と、`satori_conf.txt` の `＄キッチンタイマーＮの分数` も）。`dic02_Event.txt` の `＊rが押された` は、辞書を書くときに便利なので残してもよい
 - [ ] 同梱の `readme.txt` と `install.txt` を、自分のゴースト向けに書き直す（`readme.txt` は原作者の連絡先と配布元 URL のまま）
 - [ ] `satori_license.txt` は、`satori.dll` を同梱する限り、残す。`satorite.exe`、`receiver.*`（と説明文書）は、使わないなら消す
 - [ ] クレジットの例:「ポストと狛犬（櫛ヶ浜やぎ、https://github.com/ukatech/POST_and_KOMAINU ）をもとに作成」（URL は実際のものに直す）
