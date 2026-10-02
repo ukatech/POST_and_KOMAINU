@@ -21,6 +21,9 @@
     not found are warnings (a variable that was never set is reported the same way); jumps to missing sentences
     are not reported, because dictionaries rely on them. Random talks (sentences without a name) and sentences with a condition are not
     run by -Run; try them with tools/shiori.ps1 -Event OnTalk.
+    A sentence that only makes sense in its event (one that a timer or an input box calls, which reads variables
+    that only exist then) can be left out of -Run: write a comment line (full-width number sign) that contains
+    "check-dic: no-run" right above its first line.
 .EXAMPLE
     powershell -NoProfile -ExecutionPolicy Bypass -File tools/check-dic.ps1
 .EXAMPLE
@@ -92,6 +95,7 @@ if ($errors -eq 0 -and $result.ExitCode -ne 0) {
 $ran = 0
 if ($Run -and $errors -eq 0) {
     $names = @(Get-DevkitSatoriTalkNames $GhostDir)
+    $skipped = @(Get-DevkitSatoriTalkNames $GhostDir -Skipped)
     # A request holds at most 3800 bytes of sentence names and the sentences are run in as many tamacs.exe runs
     # as needed (a limit from tamac.exe, which before 1.0.3.26 corrupted multi-byte characters in requests of more
     # than 4096 bytes; it also keeps each run short).
@@ -142,7 +146,7 @@ if ($Run -and $errors -eq 0) {
     }
 }
 
-$summary = "$loaded dictionaries" + $(if ($Run) { ", $ran sentences run" }) + ", errors: $errors, warnings: $warnings"
+$summary = "$loaded dictionaries" + $(if ($Run) { ", $ran sentences run" }) + $(if ($Run -and $skipped.Count -gt 0) { " ($($skipped.Count) marked no-run)" }) + ", errors: $errors, warnings: $warnings"
 if ($errors -gt 0 -or ($Strict -and $warnings -gt 0)) {
     Write-Host "check-dic: FAILED ($summary). Fix the problems above; a dictionary with an unclosed bracket is not read correctly."
     exit 1

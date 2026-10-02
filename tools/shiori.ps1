@@ -19,8 +19,11 @@
     -Event OnTalk. The result is the sakura script that SATORI makes from the lines (dangerous tags such as
     \![raise are neutralized). ShioriEcho works only when the debug mode is on and SecurityLevel is local: this
     script adds the debug mode line to the initialization sentence of satori_conf.txt in the temporary copy only
-    (the text is in tools/satori.json). -Plain also turns off the automatic waits and line breaks so that the script
-    is easy to read. Examples: docs/agents/commands.md.
+    (the text is in tools/satori.json). Examples: docs/agents/commands.md.
+
+    -Plain (with -Eval or -Event) turns off the automatic waits and line breaks so that the script is easy to read,
+    and shows each choice as \q[label,ID]. SATORI adds byte 1, the label, byte 1 and a number to the ID of a choice;
+    without -Plain the byte is shown as <01>.
 
     -Event sends "GET SHIORI/3.0" (NOTIFY with -Notify) with ID and References, as SSP does for an event or a
     resource. Sender is SSP, SecurityLevel is local and Charset is UTF-8 (SATORI answers in the charset of the
@@ -52,8 +55,9 @@ param(
     [Parameter(ParameterSetName = 'Eval', Mandatory = $true, Position = 0)]
     [string]$Eval,
 
-    # -Eval only: turn off the automatic waits and line breaks in the temporary copy.
+    # -Eval and -Event: turn off the automatic waits and line breaks in the temporary copy.
     [Parameter(ParameterSetName = 'Eval')]
+    [Parameter(ParameterSetName = 'Event')]
     [switch]$Plain,
 
     # SHIORI event or resource ID.
@@ -166,7 +170,15 @@ $loadMessages = @($diagnostics | Where-Object { $_.Phase -eq 'load' })
 $requestMessages = @($diagnostics | Where-Object { $_.Phase -ne 'load' })
 $loadErrors = @($loadMessages | Where-Object { $_.Level -eq 'error' }).Count
 
-$response = $result.Response
+# SATORI rewrites \q[label,ID] to \q[label,ID<byte 1>label<byte 1>number] (it reads the label and the number back
+# in OnChoiceSelect). Byte 1 does not show in a terminal, so -Plain drops the added part and the other modes show
+# the byte as <01>.
+function Format-ShioriText([string]$Text) {
+    if ($Plain) { return [regex]::Replace($Text, '\x01[^\x01\]]*\x01\d+', '') }
+    return $Text.Replace([string][char]1, '<01>')
+}
+
+$response = Format-ShioriText $result.Response
 $exitCode = 0
 $failure = $null
 if ($response.Trim() -ne '') {

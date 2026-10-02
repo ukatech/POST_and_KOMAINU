@@ -57,46 +57,49 @@ shiori互換dll『里々（さとり）』用辞書
 （ユーザ名）
 
 
-＊コメント
-
-　URL一覧は……
-
-　１行目がサイト名
-　２行目がジャンプ先URL
-　３行目がバナーURL（省略可）
-　４行目以降はジャンプ時に表示される会話文（省略可）
-
-　おすすめサイトは、昔のものはほとんど無くなったので、置いていない。
-　（sakura.recommendsites と kero.recommendsites を書かなければ、
-　　おすすめのボタンは出ない。）
+＃　URL一覧は……
+＃
+＃　１行目がサイト名
+＃　２行目がジャンプ先URL
+＃　３行目がバナーURL（無ければ空行。会話文を書くときは、空行でも省略しない）
+＃　４行目以降はジャンプ時に表示される会話文（省略可）
+＃
+＃　おすすめサイトは、昔のものはほとんど無くなったので、置いていない。
+＃　（sakura.recommendsites と kero.recommendsites を書かなければ、
+＃　　おすすめのボタンは出ない。）
 
 
 ＊sakura.portalsites
 SSP
 https://ssp.shillest.net/
+
 ：伺かの本体です。
 
 ＊sakura.portalsites
-UKADOC（SSP 公式仕様書）
+UKADOCφ（SSP 公式仕様書φ）
 https://ssp.shillest.net/ukadoc/manual/
+
 ：さくらスクリプトや SHIORI イベントの仕様書ですよ。
 
 ＊sakura.portalsites
 -
 
 ＊sakura.portalsites
-里々の仕様書（satori-docs）
+里々の仕様書φ（satori-docsφ）
 https://ukatech.github.io/satori-docs/
+
 ：里々の文法や関数は、ここに載ってます。
 
 ＊sakura.portalsites
-里々（satoriya-shiori）
+里々φ（satoriya-shioriφ）
 https://github.com/ukatech/satoriya-shiori
+
 ：里々のソースとリリースです。
 
 ＊sakura.portalsites
 ポストと狛犬
 https://github.com/ukatech/POST_and_KOMAINU
+
 ：私たちのおうち。
 ：管理人は……いまはリポジトリ、だな。
 

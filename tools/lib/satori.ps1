@@ -356,28 +356,43 @@ function Write-DevkitSatoriDiagnostics {
 
 # Names of the sentences (asterisk + name) in the dictionaries of $GhostDir that can be run by name: dic*.txt next to
 # satori.dll, names without a condition, argument separator or parenthesis. Wrap the call in @().
-function Get-DevkitSatoriTalkNames([string]$GhostDir) {
+# A sentence right below a comment line (full-width number sign) that contains "check-dic: no-run" is left out:
+# one that only makes sense in its event (a timer, an input box), so running it by name gives warnings that mean
+# nothing. -Skipped returns the names that were left out that way instead.
+function Get-DevkitSatoriTalkNames([string]$GhostDir, [switch]$Skipped) {
     $mark = ([string](Get-DevkitSatoriData).initSentence).Substring(0, 1)
+    $comment = [string][char]0xFF03
     $names = New-Object System.Collections.Generic.List[string]
     $conditional = @{}
+    $noRun = @{}
     foreach ($file in @(Get-ChildItem -LiteralPath $GhostDir -File -Filter 'dic*.txt' | Sort-Object Name)) {
+        $pendingNoRun = $false
         foreach ($line in ((Read-DevkitTextFileAuto $file.FullName).Text -split "\r?\n")) {
-            if (-not $line.StartsWith($mark)) { continue }
+            if ($line.StartsWith($comment)) {
+                if ($line -match 'check-dic:\s*no-run') { $pendingNoRun = $true }
+                continue
+            }
+            if (-not $line.StartsWith($mark)) { $pendingNoRun = $false; continue }
             $body = $line.Substring(1)
             $tab = $body.IndexOf("`t")
             if ($tab -ge 0) {
                 # name<TAB>condition: the name may also be defined without a condition elsewhere.
                 $conditional[$body.Substring(0, $tab).Trim()] = $true
+                $pendingNoRun = $false
                 continue
             }
             $name = $body.Trim()
+            if ($pendingNoRun) { $noRun[$name] = $true }
+            $pendingNoRun = $false
             if ($name -eq '' -or $name -match '[\s\u3000,\u3001\uFF0C\uFF08\uFF09()]') { continue }
             $names.Add($name)
         }
     }
     $result = New-Object System.Collections.Generic.List[string]
     foreach ($name in ($names | Sort-Object -Unique)) {
-        if (-not $conditional.ContainsKey($name)) { $result.Add($name) }
+        if ($conditional.ContainsKey($name)) { continue }
+        if ($noRun.ContainsKey($name) -ne [bool]$Skipped) { continue }
+        $result.Add($name)
     }
     return $result.ToArray()
 }
