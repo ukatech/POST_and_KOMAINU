@@ -8,7 +8,7 @@
 - 伺か（ukagaka）のゴースト「ポストと狛犬」（`ghost/master/descript.txt` の `name`）。SHIORI「里々（SATORI）」の**サンプルゴースト**で、里々の辞書の書き方を、動くゴーストとして見せるためのもの。「里々バイブコーディングツールキット」として、これを土台に自分のゴーストを作ってもらう。
 - キャラクター: `sakura.name` は「ポスト」、`kero.name` は「狛犬」。
 - 原作者: 櫛ヶ浜やぎ（Yagi Kushigahama、里々の作者）。里々に同梱されていたサンプルゴーストを、ponapalt と協力者がいまの環境向けに作り直している。
-- SHIORI: `satori.dll`（Unicode 版、内部のバージョン表記は Mc201-5）。文字コードは UTF-8（`descript.txt` の `charset,UTF-8`）。辞書・設定・置換ファイルはすべて UTF-8（BOM なし）、改行は LF。
+- SHIORI: `satori.dll`（Unicode 版、内部のバージョン表記は Mc201-11）。文字コードは UTF-8（`descript.txt` の `charset,UTF-8`）。辞書・設定・置換ファイルはすべて UTF-8（BOM なし）、改行は LF。
 - 里々の仕様書: https://github.com/ukatech/satori-docs （`grammar/` 文法、`shiori/` イベントと動作、`functions/` `（）` 内蔵関数、`system/` システム変数、`ssu/` ssu の関数）。里々の構文は推測で書かず、ここで確かめる。
 - `install.txt` は `directory,POST_and_KOMAINU`（インストール先）、`refresh,1`、`refreshundeletemask,satori_savedata.txt`（再インストールでもセーブデータを消さない）。
 - ネットワーク更新の URL は `dic06_String.txt` の `＠homeurl`（`descript.txt` には `homeurl` を書いていない）。いまはコメントアウトしてあり、値は `https://raw.githubusercontent.com/ukatech/POST_and_KOMAINU/main/`（`updates2.dau` を置く場所）。使うときはコメントを外す。
@@ -40,7 +40,7 @@
 |---|---|
 | `dic00_System.txt` | `＊OnSatoriLoad`（`＄NOTIFYの自動保存`、文・単語群の重複回避の設定）と、危険なさくらスクリプトを無効にする `＠KillDangerousTag`（`＠DangerousTag` の一覧）。ユーザーの入力を台詞に出すときは `（call（バイト値、１）KillDangerousTag（バイト値、１）（…））` を通す（`＊ユーザ名を教えてもらった`、`＊OnInstallRefuse`）。`＄デバッグ 無効` は書かない（`tools/shiori.ps1 -Eval` のデバッグモードを打ち消すため） |
 | `dic01_Base.txt` | 初回起動（`＊初回`、`＊初回二回目以降`）、起動（`＊起動`。時間帯で `＊朝に起動` などへ分岐）、終了（`＊終了`）、**ランダムトーク**（名前のない `＊`）。選択肢を出すトーク（`＊` から始まり `＿たこ` などの選択肢を持つクイズ）もここ。`＠` で始まる単語群（`＠季節の食べ物` など）の例 |
-| `dic02_Event.txt` | 本体からのイベント。インストール（`OnInstall*`）、シェル変更（`OnShellChanging` `OnShellChanged`）、ネットワーク更新（`OnUpdate*`）、時計合わせ（`OnSNTP*`）、ヘッドライン（`OnHeadlinesense*`）、メールチェック（`OnBIFF*`）、選択肢（`OnChoiceSelect` `OnChoiceTimeout`）、消滅（`OnVanish*`）、キー入力（`OnKeyPress`）、URL ドロップ（`OnURLDropping` `OnURLDropped`）、`OnUserInput` など。また `OnFirstBoot` `OnBoot` `OnClose` `OnGhostChanged` `OnGhostChanging` から、`＊初回` `＊起動` `＊終了` などへジャンプさせている |
+| `dic02_Event.txt` | 本体からのイベント。インストール（`OnInstall*`）、シェル変更（`OnShellChanging` `OnShellChanged`）、ネットワーク更新（`OnUpdate*`）、時計合わせ（`OnSNTP*`）、ヘッドライン（`OnHeadlinesense*`）、メールチェック（`OnBIFF*`）、選択肢（`OnChoiceSelect` `OnChoiceTimeout`。引数付きの選択肢 `＿ラベル<タブ>ID<タブ>引数` は `OnChoiceSelectEx` が ID の文を `（call）` で呼び、引数を `（Ａ０）`〜にする。`＊OnChoiceSelect` があると里々は引数を渡さないため）、消滅（`OnVanish*`）、キー入力（`OnKeyPress`）、URL ドロップ（`OnURLDropping` `OnURLDropped`）、`OnUserInput` など。また `OnFirstBoot` `OnBoot` `OnClose` `OnGhostChanged` `OnGhostChanging` から、`＊初回` `＊起動` `＊終了` などへジャンプさせている |
 | `dic03_Menu.txt` | マウス反応（`＊0Headなでられ`、`＊0LeftEyeつつかれ`、`＊0ころころ` など）と、**メインメニュー**（`＊0Faceつつかれ`、顔をつつく）。喋り頻度の変更、ランダムトークの追加分もここ |
 | `dic04_Change.txt` | ゴーストの切り替えのときのトーク（`＊<相手のsakura.name>へ変更`、`＊<相手のsakura.name>から変更`、`＊他のゴーストへ変更` `＊他のゴーストから変更`）。相手のゴーストごとに、名前で書き分けている |
 | `dic05_Communicate.txt` | コミュニケート。メニューの「隣のゴーストにでんぱを送る」（`＊隣のゴーストにでんぱを送る`）、他のゴーストとの会話（`＊なるに話しかける` など）、ユーザーの入力への返事（`＊ユーザ「　元気`）、`＊COMMUNICATE該当なし` |
@@ -48,7 +48,7 @@
 | `dic07_Time.txt` | 時報（`＊１時` … `＊０時`。名前は全角数字）、記念日（`＊１１月３日`）、`＊OnMinuteChange` と `＊０分` `＊３０分`、タイマの例（`＊0Bustつつかれ`） |
 | `dic08_Labo.txt` | 里々の機能の実験室。メニューの「らぼ」（`＊らぼ`）から選ぶ。時報の変数、計算、条件分岐、マルチキャラクタ（`another/` への切り替え）、乱数、タイマ、変数名を変数で作る、`≫` での検索ジャンプ、FMO、`Sender` の比較など |
 | `dic10_Test.txt` | ssu の関数（`if` `iflist` `switch` `choice` `split` `substr` `nop`）の使い方サンプル。メニューの「SAORIてすと」から選ぶ |
-| `dic11_Timer.txt` | キッチンタイマー。メニューの「キッチンタイマー」（`＊キッチンタイマー`）から。里々のタイマ変数だけで作っていて、5 つの枠（`＄キッチンタイマー１タイマ`〜`５`、`＄キッチンタイマー１の分数`〜`５`。分数の初期値 `０` は `satori_conf.txt`）を同時に動かせる。動いているタイマーの一覧（`＊動いているキッチンタイマー`、`（loop）` で単語群を呼ぶ）から止められる。鳴ると `＊キッチンタイマーＮ`。終了時（`＊OnSatoriClose`）にすべて取り消す。時間の入力は `＊OnUserInput`（ID `キッチンタイマーの入力`）を通る |
+| `dic11_Timer.txt` | キッチンタイマー。メニューの「キッチンタイマー」（`＊キッチンタイマー`）から。里々のタイマ変数だけで作っていて、5 つの枠（`＄キッチンタイマー１タイマ`〜`５`、`＄キッチンタイマー１の分数`〜`５`。分数の初期値 `０` は `satori_conf.txt`）を同時に動かせる。動いているタイマーの一覧（`＊動いているキッチンタイマー`、`（loop）` で単語群を呼ぶ）から止められる。分数の選択肢と止める選択肢は、引数付きの選択肢（`（Ａ０）` が分数や番号）。`＊キッチンタイマーＮ` の文は無く、鳴ると `＊OnSatoriTimer`（名前が「キッチンタイマー」で始まるときだけの条件付き。`（Ａ１）` が遅れた秒数）。終了時（`＊OnSatoriClose`）にすべて取り消す。時間の入力は `＊OnUserInput`（ID `キッチンタイマーの入力`）を通る |
 | `dic09_ExEvent.txt` | 外部アプリのイベント（きのこ `OnKinokoObject*`、猫どりふ `OnNekodorifObject*`、バッテリー `OnBatteryLow`、`OnSysResource*`、`OnApplicationOperationFinish` など） |
 | `another/dic1.txt` | 別のキャラクター（さとりちゃん＝サーフェス 100、博士＝サーフェス 200）の辞書。`dic08` の `＊マルチキャラクタ` で `＄辞書フォルダ another` にすると読まれる。「はい」を選ぶと `＄辞書フォルダ .` で元に戻る |
 
